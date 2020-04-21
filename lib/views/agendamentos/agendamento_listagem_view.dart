@@ -36,7 +36,7 @@ class AgendamentoListagemView extends StatelessWidget {
                       onTap: (){
                         Get.toNamed(NamesRoutes.agendamentoAtualizar, arguments: item.id);
                       },
-                      leading: Icon(Icons.perm_identity, size: 35),
+                      leading: Icon(Icons.calendar_today, size: 35),
                     ),
                   );
                 },

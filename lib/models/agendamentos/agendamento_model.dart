@@ -19,7 +19,7 @@ class Agendamento extends Entidade {
 
   Agendamento.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    data = DateTime.fromMillisecondsSinceEpoch(json['dataNumero']*1000);
+    data = DateTime.fromMillisecondsSinceEpoch(json['dataNumero']);
     quantidade = json['quantidade'];
     valor = json['valor'];
     idCliente = json['idCliente'];
@@ -28,7 +28,7 @@ class Agendamento extends Entidade {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['dataNumero'] = this.data.second;
+    data['dataNumero'] = this.data.millisecondsSinceEpoch;
     data['quantidade'] = this.quantidade;
     data['valor'] = this.valor;
     data['idCliente'] = this.idCliente;

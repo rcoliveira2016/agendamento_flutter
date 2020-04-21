@@ -14,7 +14,7 @@ class AgendamentoRepository extends RepositoryBase<Agendamento>{
       1 as marcado,
       cliente.id,
       cliente.id as idCliente,
-      (max(dataNumero)+(cliente.frequencia*24*60*60)) as dataNumero,
+      (max(dataNumero)+(cliente.frequencia*24*60*60*1000)) as dataNumero,
       quantidadeCavalos as quantidade,
       quantidadeCavalos*${Constantes.valorCustoPadrao} as valor
       from cliente, agendamento
