@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:agendamentos/controllers/agendamentos/agendamento_cadastro_controller.dart';
+import 'package:agendamentos/controllers/agendamentos/agendamento_listagem_controller.dart';
 import 'package:agendamentos/controllers/clientes/cliente_cadastro_controller.dart';
 import 'package:agendamentos/controllers/clientes/cliente_listagem_controller.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
@@ -32,6 +34,9 @@ class Injection {
   static void controllerRepositories() {
     injector.map<ClienteListagemController>((i) => new ClienteListagemController(), isSingleton: false);
     injector.map<ClienteCadastroController>((i) => new ClienteCadastroController(), isSingleton: false);
+    
+    injector.map<AgendamentoListagemController>((i) => new AgendamentoListagemController(), isSingleton: false);
+    injector.map<AgendamentoCadastroController>((i) => new AgendamentoCadastroController(), isSingleton: false);
   }
 
 }

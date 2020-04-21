@@ -5,7 +5,6 @@ class Agendamento extends Entidade {
   int quantidade;
   double valor;
   int idCliente;
-  bool marcado;
 
   int dataNumero;
 
@@ -16,26 +15,23 @@ class Agendamento extends Entidade {
     this.quantidade, 
     this.valor, 
     this.idCliente, 
-    this.marcado,
   }):super(id:id);
 
   Agendamento.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    data = DateTime.fromMillisecondsSinceEpoch(json['dataNumero']);
+    data = DateTime.fromMillisecondsSinceEpoch(json['dataNumero']*1000);
     quantidade = json['quantidade'];
     valor = json['valor'];
     idCliente = json['idCliente'];
-    marcado = json['marcado'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['dataNumero'] = this.data.millisecondsSinceEpoch;
+    data['dataNumero'] = this.data.second;
     data['quantidade'] = this.quantidade;
     data['valor'] = this.valor;
     data['idCliente'] = this.idCliente;
-    data['marcado'] = this.marcado;
     return data;
   }
 

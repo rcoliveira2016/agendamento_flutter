@@ -1,3 +1,4 @@
+import 'package:agendamentos/shared/constants/name_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,14 +25,14 @@ class DrawerDefalt extends StatelessWidget {
             leading: Icon(Icons.assignment_ind),
             title: Text('Clientes'),
             onTap: (){
-              Get.toNamed('/cliente');
+              Get.toNamed(NamesRoutes.cliente);
             },
           ),
           ListTile(
             leading: Icon(Icons.calendar_today),
             title: Text('Agendamento'),
             onTap: (){
-              Get.toNamed('/agendamento');
+              Get.toNamed(NamesRoutes.agendamento);
             },
           ),
         ],

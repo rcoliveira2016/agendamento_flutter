@@ -1,6 +1,9 @@
+import 'package:agendamentos/controllers/agendamentos/agendamento_listagem_controller.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
 import 'package:agendamentos/views/Cliente/cliente_cadastro_view.dart';
 import 'package:agendamentos/views/Cliente/cliente_listagem_view.dart';
+import 'package:agendamentos/views/agendamentos/agendamento_cadastro_view.dart';
+import 'package:agendamentos/views/agendamentos/agendamento_listagem_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,9 +13,10 @@ class Router {
     switch (settings.name) {
       case '/':
         return GetRoute(
-          page: ClienteListagemView(),
+          page: AgendamentoListagemView(),
           settings: settings,
         );
+
       case NamesRoutes.cliente:
         return GetRoute(
           page: ClienteListagemView(),
@@ -28,6 +32,23 @@ class Router {
           page: ClienteCadastroView(id:settings.arguments),
           settings: settings,
         );
+
+      case NamesRoutes.agendamento:
+        return GetRoute(
+          page: AgendamentoListagemView(),
+          settings: settings,
+        );
+      case NamesRoutes.agendamentoCadastro:
+        return GetRoute(
+          page: AgendamentoCadastroView(),
+          settings: settings,
+        );
+      case NamesRoutes.agendamentoAtualizar:
+        return GetRoute(
+          page: AgendamentoCadastroView(id:settings.arguments),
+          settings: settings,
+        );
+
       default:
         return GetRoute(
             settings: settings,

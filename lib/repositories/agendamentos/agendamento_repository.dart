@@ -1,4 +1,5 @@
 import 'package:agendamentos/models/agendamentos/agendamento_model.dart';
+import 'package:agendamentos/shared/constants/constants.dart';
 import 'package:agendamentos/shared/infra/data/repository/repository_dase.dart';
 
 class AgendamentoRepository extends RepositoryBase<Agendamento>{
@@ -13,9 +14,9 @@ class AgendamentoRepository extends RepositoryBase<Agendamento>{
       1 as marcado,
       cliente.id,
       cliente.id as idCliente,
-      (max(dataNumero)+(cliente.frequencia*24*60*60*1000)) as dataNumero,
+      (max(dataNumero)+(cliente.frequencia*24*60*60)) as dataNumero,
       quantidadeCavalos as quantidade,
-      quantidadeCavalos*140 as valor
+      quantidadeCavalos*${Constantes.valorCustoPadrao} as valor
       from cliente, agendamento
       where cliente.id = agendamento.idCliente
       group by cliente.id, quantidadeCavalos, frequencia            
