@@ -10,8 +10,9 @@ class NumeroAgendamentoFormField extends BaseTextAgendamentoFormField {
     String hintText,
     FormFieldSetter<int> onSaved,
     FormFieldValidator<int> validator= null,
+    ValueChanged<int> onChanged = null,
     Icon iconLabel,
-    bool autofocus
+    bool autofocus,
   }):super(
     initialValue:initialValue?.toString(),
     labelText:labelText,
@@ -21,6 +22,9 @@ class NumeroAgendamentoFormField extends BaseTextAgendamentoFormField {
     },
     validator:validator==null?null:(text){
       return validator(int.tryParse(text));
+    },
+    onChanged:onChanged==null?null:(text){
+      onChanged(int.tryParse(text));
     },
     iconLabel:iconLabel,
     autofocus:autofocus,

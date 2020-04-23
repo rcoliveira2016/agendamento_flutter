@@ -1,3 +1,4 @@
+import 'package:agendamentos/models/clientes/cliente_model.dart';
 import 'package:agendamentos/shared/Models/entidade.dart';
 
 class Agendamento extends Entidade {
@@ -7,7 +8,7 @@ class Agendamento extends Entidade {
   int idCliente;
 
   int dataNumero;
-
+  Cliente cliente;
 
   Agendamento({
     int id,
@@ -16,6 +17,10 @@ class Agendamento extends Entidade {
     this.valor, 
     this.idCliente, 
   }):super(id:id);
+
+  adicionarCliente(Cliente cliente){
+    this.cliente = cliente;
+  }
 
   Agendamento.fromJson(Map<String, dynamic> json) {
     id = json['id'];
