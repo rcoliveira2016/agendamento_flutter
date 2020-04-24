@@ -59,7 +59,11 @@ abstract class _AgendamentoCadastroController with Store {
         setarCliente(agendamentoAtual.idCliente);
       }
       else
-        agendamentoAtual = AgendamentoStore();
+        agendamentoAtual = AgendamentoStore.criarNovo();
+    }
+
+    deletar(int id) async{
+      await _agendamentoRepository.delete(id);
     }
 
     Future salvar() async {

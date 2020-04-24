@@ -17,6 +17,11 @@ abstract class _AgendamentoStoreBase with Store {
     setIdCliente(agendamento.idCliente);
   }
 
+  _AgendamentoStoreBase.criarNovo(){
+    data = DateTime.now();
+  }
+
+
   int id;
 
   @observable

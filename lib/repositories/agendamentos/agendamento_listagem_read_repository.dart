@@ -1,5 +1,6 @@
 import 'package:agendamentos/models/agendamentos/agendamento_listagem_model.dart';
 import 'package:agendamentos/shared/constants/constants.dart';
+import 'package:agendamentos/shared/extension/date_time_extension.dart';
 import 'package:agendamentos/shared/infra/data/repository/repository_read_dase.dart';
 
 class AgendamentoListagemReadRepository
@@ -10,11 +11,15 @@ class AgendamentoListagemReadRepository
 
   Future<List<AgendamentoListagemModel>> buscarAgendamentoNaoAgendado(
       DateTime dataInicial, DateTime dataFinal) async {
+    
+    var dataInicioMilliSecondsS = dataInicial.startDay();
+    var dataFimMilliSecondsS = dataFinal.endDay();
+    
     var filtro = [
-      dataInicial.millisecondsSinceEpoch,
-      dataFinal.millisecondsSinceEpoch,
-      dataInicial.millisecondsSinceEpoch,
-      dataFinal.millisecondsSinceEpoch
+      dataInicioMilliSecondsS.millisecondsSinceEpoch,
+      dataFimMilliSecondsS.millisecondsSinceEpoch,
+      dataInicioMilliSecondsS.millisecondsSinceEpoch,
+      dataFimMilliSecondsS.millisecondsSinceEpoch
     ];
 
     return getAll('''
@@ -42,6 +47,7 @@ class AgendamentoListagemReadRepository
         cliente, agendamento
       where 
         cliente.id = agendamento.idCliente
+        and dataNumero = (select max(ag.dataNumero) from agendamento ag where ag.idCliente = cliente.id)
         and (dataNumero)+(cliente.frequencia*24*60*60*1000) BETWEEN ? and ?
       group by cliente.id, quantidadeCavalos, frequencia            
     ''', filtro);

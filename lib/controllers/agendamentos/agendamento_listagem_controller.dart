@@ -27,26 +27,34 @@ abstract class _AgendamentoListagemControllerBase with Store {
   @action
   init() async {
     setarDataSemana(DateTime.now());
-    items.addAll(await _agendamentoListagemReadRepository
-        .buscarAgendamentoNaoAgendado(dataInicioSemana, dataFinalSemana));
+    buscarDados();
   }
 
   @action
   filtroData(DateTime dataDiaSemana) async {
     setarDataSemana(dataDiaSemana);
-    items.addAll(await _agendamentoListagemReadRepository
-        .buscarAgendamentoNaoAgendado(dataInicioSemana, dataFinalSemana));
+    buscarDados();
   }
 
   @action
   cadastro(AgendamentoListagemModel model) async {
-    _agendamentoRepository.add(Agendamento(
+    await _agendamentoRepository.add(Agendamento(
       data: model.data,
       idCliente: model.idCliente,
       quantidade: model.quantidade,
       valor: model.valor
     ));
 
+    buscarDados();
+  }
+
+  @action
+  deletar(int id) async{
+    await _agendamentoRepository.delete(id);
+    buscarDados();
+  }
+
+  buscarDados() async {
     items.clear();
     items.addAll(await _agendamentoListagemReadRepository
         .buscarAgendamentoNaoAgendado(dataInicioSemana, dataFinalSemana));

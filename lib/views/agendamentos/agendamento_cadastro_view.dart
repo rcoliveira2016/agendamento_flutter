@@ -1,16 +1,12 @@
 import 'package:agendamentos/controllers/agendamentos/agendamento_cadastro_controller.dart';
-import 'package:agendamentos/controllers/clientes/cliente_cadastro_controller.dart';
-import 'package:agendamentos/models/clientes/cliente_model.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:agendamentos/widgets/date_picker/date_picker_buttom.dart';
 import 'package:agendamentos/widgets/forms/agendamento_form_field/dinheiro_agendamento_form_field.dart';
 import 'package:agendamentos/widgets/forms/agendamento_form_field/numero_agendamento_form_field.dart';
-import 'package:agendamentos/widgets/forms/agendamento_form_field/texto_agendamento_form_field.dart';
 import 'package:agendamentos/widgets/scaffold/app_bar_defalt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 
@@ -35,7 +31,7 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarDefalt(title: "Agendamento"),
+      appBar: AppBarDefalt(title: "Agendamento", actions:_boataoDeletar()),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(6.0),
@@ -156,5 +152,35 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
         },
       ),
     );
+  }
+
+  _boataoDeletar() {
+    return <Widget>[
+        Observer(builder: (_)
+        {
+          return _controller?.agendamentoAtual?.id==null?SizedBox(): IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            Get.defaultDialog(
+              title: "Agendamento",
+              content: Container(
+                child: Text("Deseja excluir o agendamento."),
+              ),
+              cancel: FlatButton(
+                child: Text("Não"),
+                onPressed: () => Get.back(),
+              ),
+              confirm: FlatButton(
+                child: Text("Sim"),
+                onPressed: () {
+                  _controller.deletar(_controller.agendamentoAtual.id);
+                  Get.offNamed(NamesRoutes.agendamento);
+                },
+              ),
+            );
+          },
+        );
+        })
+      ];
   }
 }

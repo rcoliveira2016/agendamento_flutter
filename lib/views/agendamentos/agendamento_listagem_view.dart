@@ -20,7 +20,9 @@ class AgendamentoListagemView extends StatefulWidget {
 class _AgendamentoListagemViewState extends State<AgendamentoListagemView> {
   final AgendamentoListagemController _controller = Injection.injector.get();
 
-  final textStyleFiltroData = TextStyle(fontSize: 15);
+  static final fontSizeTextStyleFiltroData = 15.0;
+  static final textStyleFiltroData =
+      TextStyle(fontSize: fontSizeTextStyleFiltroData);
 
   @override
   void initState() {
@@ -33,122 +35,7 @@ class _AgendamentoListagemViewState extends State<AgendamentoListagemView> {
     return Scaffold(
       appBar: AppBarDefalt(title: Constantes.titleApp),
       drawer: DrawerDefalt(),
-      body: Observer(
-        builder: (_) {
-          return Column(
-            children: <Widget>[
-              Card(
-                margin: EdgeInsets.fromLTRB(5, 15, 5, 5),
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Colors.black12, width: 1),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Observer(builder: (_) {
-                  return _controller.dataInicioSemana == null
-                      ? SizedBox()
-                      : FlatButton(
-                          onPressed: () {
-                            var picked = showDatePicker(
-                                context: context,
-                                initialDate: _controller.dataInicioSemana,
-                                firstDate: DateTime(2017),
-                                lastDate: DateTime(2100));
-                            picked.then(_controller.filtroData);
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                "Semana: ",
-                                style: textStyleFiltroData,
-                              ),
-                              Text(
-                                _controller.dataInicioSemana
-                                    .formatar(DateFormat.YEAR_MONTH_DAY),
-                                style: textStyleFiltroData,
-                              ),
-                              Text(
-                                " - ",
-                                style: textStyleFiltroData,
-                              ),
-                              Text(
-                                _controller.dataFinalSemana
-                                    .formatar(DateFormat.YEAR_MONTH_DAY),
-                                style: textStyleFiltroData,
-                              )
-                            ],
-                          ),
-                        );
-                }),
-              ),
-              Expanded(
-                child:_controller.items.isEmpty?
-                Center(
-                  child: Text("Sem dados"),
-                ):
-                Card(
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.black12, width: 1),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: ListView.builder(
-                        itemCount: _controller.items.length,
-                        itemBuilder: (context, index) {
-                          AgendamentoListagemModel item =
-                              _controller.items[index];
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.white10, width: 1),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: ListTile(
-                              title: Text("${item.nomeCliente}"),
-                              subtitle: Text(
-                                  "${item.data.formatar(DateFormat.YEAR_MONTH_DAY)}"),
-                              onTap: () {
-                                if (item.marcado)
-                                  Get.toNamed(NamesRoutes.agendamentoAtualizar,
-                                      arguments: item.id);
-                                else
-                                  Get.defaultDialog(
-                                    title: "Agendamento",
-                                    content: Container(
-                                      child: Text("Deseja agendar data."),
-                                    ),
-                                    cancel: FlatButton(
-                                      child: Text("Não"),
-                                      onPressed: () => Get.back(),
-                                    ),
-                                    confirm: FlatButton(
-                                      child: Text("Sim"),
-                                      onPressed: () {
-                                        _controller.cadastro(item);
-                                        Get.back();
-                                      },
-                                    ),
-                                  );
-                              },
-                              leading: Icon(
-                                Icons.calendar_today,
-                                size: 35,
-                                color:
-                                    item.marcado ? Colors.red : Colors.black87,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-      ),
+      body: _body(),
       floatingActionButton: Theme(
         data: Theme.of(context).copyWith(
           colorScheme: Theme.of(context).colorScheme,
@@ -160,6 +47,131 @@ class _AgendamentoListagemViewState extends State<AgendamentoListagemView> {
           child: Icon(Icons.add),
         ),
       ),
+    );
+  }
+
+  Widget _body() {
+    return Observer(
+      builder: (_) {
+        return Column(
+          children: <Widget>[
+            _filtro(),
+            _listagem(),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _filtro() {
+    return Card(
+      margin: EdgeInsets.fromLTRB(5, 15, 5, 5),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.black12, width: 1),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Observer(builder: (_) {
+        return _controller.dataInicioSemana == null
+            ? SizedBox()
+            : FlatButton(
+                onPressed: () {
+                  var picked = showDatePicker(
+                      context: context,
+                      initialDate: _controller.dataInicioSemana,
+                      firstDate: DateTime(2017),
+                      lastDate: DateTime(2100));
+                  picked.then(_controller.filtroData);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "filtro: ",
+                      style: TextStyle(
+                          fontSize: fontSizeTextStyleFiltroData,
+                          fontWeight: FontWeight.w900),
+                    ),
+                    Text(
+                      _controller.dataInicioSemana.formatar("d MMMM"),
+                      style: textStyleFiltroData,
+                    ),
+                    Text(
+                      " entre ",
+                      style: textStyleFiltroData,
+                    ),
+                    Text(
+                      _controller.dataFinalSemana.formatar("d MMMM"),
+                      style: textStyleFiltroData,
+                    )
+                  ],
+                ),
+              );
+      }),
+    );
+  }
+
+  Widget _listagem() {
+    return Expanded(
+      child: _controller.items.isEmpty
+          ? Center(
+              child: Text("Sem dados"),
+            )
+          : Card(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Colors.black12, width: 1),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: ListView.builder(
+                    itemCount: _controller.items.length,
+                    itemBuilder: (context, index) {
+                      AgendamentoListagemModel item = _controller.items[index];
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(color: Colors.white10, width: 1),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: ListTile(
+                          title: Text("${item.nomeCliente}"),
+                          subtitle: Text(
+                              "${item.data.formatar(DateFormat.YEAR_MONTH_DAY)}"),
+                          onTap: () {
+                            if (item.marcado)
+                              Get.toNamed(NamesRoutes.agendamentoAtualizar,
+                                  arguments: item.id);
+                            else
+                              Get.defaultDialog(
+                                title: "Agendamento",
+                                content: Container(
+                                  child: Text("Deseja agendar data."),
+                                ),
+                                cancel: FlatButton(
+                                  child: Text("Não"),
+                                  onPressed: () => Get.back(),
+                                ),
+                                confirm: FlatButton(
+                                  child: Text("Sim"),
+                                  onPressed: () {
+                                    _controller.cadastro(item);
+                                    Get.back();
+                                  },
+                                ),
+                              );
+                          },
+                          leading: Icon(
+                            Icons.calendar_today,
+                            size: 35,
+                            color: item.marcado ? Colors.red : Colors.black87,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
     );
   }
 }

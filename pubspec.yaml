@@ -11,7 +11,7 @@ dependencies:
     
   flutter_localizations:
    sdk: flutter
-
+  flutter_automation: ^1.1.4  
   cupertino_icons: ^0.1.2
   sqflite: ^1.1.0
   flutter_simple_dependency_injection: ^1.0.1

@@ -10,6 +10,10 @@ abstract class RepositoryBase<TEntidade extends Entidade>  {
 
   TEntidade map(Map<String, dynamic> json);
   
+  Future delete(int id) async{
+    await _dataBaseProvider.db.delete(nameTable, where: "id = ?", whereArgs: [id]);
+  }
+
   Future updade(int id, Entidade entidade) async{
     await _dataBaseProvider.db.update(nameTable, entidade.toJson(), where: "id = ?", whereArgs: [id]);
   }
