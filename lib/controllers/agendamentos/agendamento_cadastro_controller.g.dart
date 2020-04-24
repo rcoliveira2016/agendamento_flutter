@@ -21,6 +21,12 @@ mixin _$AgendamentoCadastroController on _AgendamentoCadastroController, Store {
   int get quantidadeCavalos => (_$quantidadeCavalosComputed ??=
           Computed<int>(() => super.quantidadeCavalos))
       .value;
+  Computed<String> _$localPadraoComputed;
+
+  @override
+  String get localPadrao =>
+      (_$localPadraoComputed ??= Computed<String>(() => super.localPadrao))
+          .value;
 
   final _$agendamentoAtualAtom =
       Atom(name: '_AgendamentoCadastroController.agendamentoAtual');
@@ -65,18 +71,17 @@ mixin _$AgendamentoCadastroController on _AgendamentoCadastroController, Store {
     return _$setarClienteAsyncAction.run(() => super.setarCliente(id));
   }
 
-  final _$buscarAgendamentoAsyncAction = AsyncAction('buscarAgendamento');
+  final _$initAsyncAction = AsyncAction('init');
 
   @override
-  Future<void> buscarAgendamento(int id) {
-    return _$buscarAgendamentoAsyncAction
-        .run(() => super.buscarAgendamento(id));
+  Future<void> init(int id) {
+    return _$initAsyncAction.run(() => super.init(id));
   }
 
   @override
   String toString() {
     final string =
-        'agendamentoAtual: ${agendamentoAtual.toString()},itemsClientes: ${itemsClientes.toString()},valorCalculado: ${valorCalculado.toString()},quantidadeCavalos: ${quantidadeCavalos.toString()}';
+        'agendamentoAtual: ${agendamentoAtual.toString()},itemsClientes: ${itemsClientes.toString()},valorCalculado: ${valorCalculado.toString()},quantidadeCavalos: ${quantidadeCavalos.toString()},localPadrao: ${localPadrao.toString()}';
     return '{$string}';
   }
 }

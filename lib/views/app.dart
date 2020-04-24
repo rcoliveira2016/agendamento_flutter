@@ -1,6 +1,7 @@
 import 'package:agendamentos/configurations/get/middle_ware.dart';
 import 'package:agendamentos/configurations/get/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
 class App extends StatelessWidget {
@@ -13,6 +14,11 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorKey: Get.key,
       initialRoute: "/",
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [const Locale('pt', 'BR')],
       navigatorObservers: [
         GetObserver(MiddleWare.observer),
       ],

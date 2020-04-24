@@ -38,6 +38,12 @@ abstract class _AgendamentoCadastroController with Store {
         agendamentoAtual.quantidade??0:
         agendamentoAtual.cliente.quantidadeCavalos??0;
     }
+
+    @computed
+    String get localPadrao {
+      return agendamentoAtual.cliente==null?"":agendamentoAtual.cliente.localPadrao;
+    }
+
     @action
     setarCliente(int id) async {
       var cliente = itemsClientes.firstWhere((x)=> x.id == id);
@@ -46,16 +52,19 @@ abstract class _AgendamentoCadastroController with Store {
     }  
 
     @action
-    Future<void> buscarAgendamento(int id) async {
-      agendamentoAtual = id == null?
-        AgendamentoStore():
-        AgendamentoStore(agendamento: await _agendamentoRepository.getId(id));
+    Future<void> init(int id) async {
       itemsClientes.addAll(await _clienteRepository.all());
+      if(id != null){
+        agendamentoAtual = AgendamentoStore(agendamento: await _agendamentoRepository.getId(id));
+        setarCliente(agendamentoAtual.idCliente);
+      }
+      else
+        agendamentoAtual = AgendamentoStore();
     }
 
     Future salvar() async {
       var salvaModelo = Agendamento(
-        data: DateTime.now(),
+        data: agendamentoAtual.data,
         id: agendamentoAtual.id,
         idCliente: agendamentoAtual.idCliente,
         quantidade: agendamentoAtual.quantidade,

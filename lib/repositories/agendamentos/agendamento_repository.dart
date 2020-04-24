@@ -4,24 +4,7 @@ import 'package:agendamentos/shared/infra/data/repository/repository_dase.dart';
 
 class AgendamentoRepository extends RepositoryBase<Agendamento>{
 
-  AgendamentoRepository():super(nameTable:"agendamento");
-  
-  Future<List<Agendamento>> buscarAgendamentoNaoAgendado() async {
-    return getAll('''
-      Select 0 as marcado, id, idCliente, dataNumero, quantidade, valor from agendamento
-      UNION
-      Select
-      1 as marcado,
-      cliente.id,
-      cliente.id as idCliente,
-      (max(dataNumero)+(cliente.frequencia*24*60*60*1000)) as dataNumero,
-      quantidadeCavalos as quantidade,
-      quantidadeCavalos*${Constantes.valorCustoPadrao} as valor
-      from cliente, agendamento
-      where cliente.id = agendamento.idCliente
-      group by cliente.id, quantidadeCavalos, frequencia            
-    ''');
-  }
+  AgendamentoRepository():super(nameTable:"agendamento");  
 
   @override
   Agendamento map(Map<String, dynamic> json) => Agendamento.fromJson(json);

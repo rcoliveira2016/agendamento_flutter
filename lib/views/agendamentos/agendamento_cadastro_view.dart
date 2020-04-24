@@ -3,11 +3,14 @@ import 'package:agendamentos/controllers/clientes/cliente_cadastro_controller.da
 import 'package:agendamentos/models/clientes/cliente_model.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
+import 'package:agendamentos/widgets/date_picker/date_picker_buttom.dart';
 import 'package:agendamentos/widgets/forms/agendamento_form_field/dinheiro_agendamento_form_field.dart';
 import 'package:agendamentos/widgets/forms/agendamento_form_field/numero_agendamento_form_field.dart';
 import 'package:agendamentos/widgets/forms/agendamento_form_field/texto_agendamento_form_field.dart';
 import 'package:agendamentos/widgets/scaffold/app_bar_defalt.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 
@@ -26,7 +29,7 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
   @override
   void initState() {
     super.initState();
-    _controller.buscarAgendamento(widget.id);
+    _controller.init(widget.id);
   }
 
   @override
@@ -59,7 +62,22 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
                               : DropdownButtonFormField<int>(
                                   items: _controller.itemsClientes
                                       .map((label) => DropdownMenuItem<int>(
-                                            child: Text(label.nome),
+                                            child: Row(
+                                              children: <Widget>[
+                                                label.devendo
+                                                    ? Icon(
+                                                        Icons.money_off,
+                                                        color: Colors.red,
+                                                        size: 25,
+                                                      )
+                                                    : Icon(
+                                                        Icons.attach_money,
+                                                        color: Colors.green,
+                                                        size: 25,
+                                                      ),
+                                                Text(label.nome)
+                                              ],
+                                            ),
                                             value: label.id,
                                           ))
                                       .toList(),
@@ -75,7 +93,7 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
                               Icons.pets,
                               size: 35,
                             ),
-                            initialValue:_controller.quantidadeCavalos,
+                            initialValue: _controller.quantidadeCavalos,
                             onSaved: _controller.agendamentoAtual.setQuantidade,
                           );
                         }),
@@ -86,7 +104,32 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
                             initialValue: _controller.valorCalculado,
                             onSaved: _controller.agendamentoAtual.setValor,
                           );
-                        })
+                        }),
+                        Observer(builder: (_) {
+                          return DatePickerButtom(
+                            initialDate: _controller.agendamentoAtual.data,
+                            onChage: _controller.agendamentoAtual.setData,
+                          );
+                        }),
+                        Row(
+                          children: <Widget>[
+                            Icon(Icons.pin_drop),
+                            SizedBox(
+                              width: 27,
+                            ),
+                            Text(
+                              "Local: ",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 17.5),
+                            ),
+                            Observer(builder: (_) {
+                              return Text(
+                                _controller.localPadrao,
+                                style: TextStyle(fontSize: 17.5),
+                              );
+                            }),
+                          ],
+                        ),
                       ],
                     ),
                   ),

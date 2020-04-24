@@ -4,6 +4,7 @@ import 'package:agendamentos/controllers/agendamentos/agendamento_cadastro_contr
 import 'package:agendamentos/controllers/agendamentos/agendamento_listagem_controller.dart';
 import 'package:agendamentos/controllers/clientes/cliente_cadastro_controller.dart';
 import 'package:agendamentos/controllers/clientes/cliente_listagem_controller.dart';
+import 'package:agendamentos/repositories/agendamentos/agendamento_listagem_read_repository.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:agendamentos/repositories/agendamentos/agendamento_repository.dart';
 import 'package:agendamentos/repositories/clientes/cliente_repository.dart';
@@ -29,6 +30,7 @@ class Injection {
   static void initRepositories() {
     injector.map<ClienteRepository>((i) => new ClienteRepository(), isSingleton: false);
     injector.map<AgendamentoRepository>((i) => new AgendamentoRepository(), isSingleton: false);
+    injector.map<AgendamentoListagemReadRepository>((i) => new AgendamentoListagemReadRepository(), isSingleton: false);
   }  
 
   static void controllerRepositories() {
