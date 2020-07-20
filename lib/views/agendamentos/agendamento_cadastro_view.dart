@@ -12,7 +12,8 @@ import 'package:get/get.dart';
 
 class AgendamentoCadastroView extends StatefulWidget {
   int id;
-  AgendamentoCadastroView({this.id});
+  int idCliente;
+  AgendamentoCadastroView({this.id,this.idCliente});
   @override
   _AgendamentoCadastroStateView createState() =>
       _AgendamentoCadastroStateView();
@@ -25,7 +26,7 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
   @override
   void initState() {
     super.initState();
-    _controller.init(widget.id);
+    _controller.init(widget.id, widget.idCliente);
   }
 
   @override

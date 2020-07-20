@@ -1,6 +1,7 @@
 import 'package:agendamentos/Stores/agendamentos/cadastro/agendamento_store.dart';
 import 'package:agendamentos/models/agendamentos/agendamento_model.dart';
 import 'package:agendamentos/models/clientes/cliente_model.dart';
+import 'package:agendamentos/repositories/agendamentos/agendamento_listagem_read_repository.dart';
 import 'package:agendamentos/repositories/agendamentos/agendamento_repository.dart';
 import 'package:agendamentos/repositories/clientes/cliente_repository.dart';
 import 'package:agendamentos/shared/constants/constants.dart';
@@ -13,7 +14,8 @@ class AgendamentoCadastroController = _AgendamentoCadastroController with _$Agen
 abstract class _AgendamentoCadastroController with Store {
     final AgendamentoRepository _agendamentoRepository = Injection.injector.get();
     final ClienteRepository _clienteRepository = Injection.injector.get();
-    
+    final AgendamentoListagemReadRepository _agendamentoListagemReadRepository = Injection.injector.get();
+
     @observable
     AgendamentoStore agendamentoAtual;
 
@@ -49,17 +51,25 @@ abstract class _AgendamentoCadastroController with Store {
       var cliente = itemsClientes.firstWhere((x)=> x.id == id);
       agendamentoAtual.setCliente(cliente);
       agendamentoAtual.setIdCliente(id);
+
+      _agendamentoListagemReadRepository.buscarProximoAgendamento(id).then((proximaData){
+        if(proximaData!=null)
+          agendamentoAtual.setData(proximaData);
+      });      
     }  
 
     @action
-    Future<void> init(int id) async {
+    Future<void> init(int id, int idCliente) async {
       itemsClientes.addAll(await _clienteRepository.all());
       if(id != null){
         agendamentoAtual = AgendamentoStore(agendamento: await _agendamentoRepository.getId(id));
         setarCliente(agendamentoAtual.idCliente);
       }
-      else
+      else{
         agendamentoAtual = AgendamentoStore.criarNovo();
+        if(idCliente!=null)
+          setarCliente(idCliente);
+      }
     }
 
     deletar(int id) async{

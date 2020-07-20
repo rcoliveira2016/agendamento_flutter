@@ -48,6 +48,11 @@ class Router {
           page: AgendamentoCadastroView(id:settings.arguments),
           settings: settings,
         );
+      case NamesRoutes.agendamentoCadastrarCliente:
+        return GetRoute(
+          page: AgendamentoCadastroView(idCliente:settings.arguments),
+          settings: settings,
+        );
 
       default:
         return GetRoute(

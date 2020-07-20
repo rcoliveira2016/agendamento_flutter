@@ -29,36 +29,59 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
     _controller.buscarCliente(widget.id);
   }
 
+  bool clienteExiste() {
+    return _controller.clienteAtual != null && !_controller.clienteAtual.isNew;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarDefalt(title: "Cliente"),
-      body: SingleChildScrollView(
-        child:Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Column(
-              children: <Widget>[
+      appBar: AppBarDefalt(
+        title: "Cliente",
+        actions: <Widget>[
+          Observer(builder: (_) {
+            return IconButton(
+              icon: Icon(Icons.date_range),
+              onPressed: () {
+                print(clienteExiste());
 
-                Observer(builder: (_) {
-                  if (_controller.clienteAtual == null) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
+                if (clienteExiste())
+                  Get.toNamed(NamesRoutes.agendamentoCadastrarCliente,
+                      arguments: _controller.clienteAtual.id);
+              },
+            );
+          })
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Column(
+            children: <Widget>[
+              Observer(builder: (_) {
+                if (_controller.clienteAtual == null) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 6),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
                           children: <Widget>[
                             TextoAgendamentoFormField(
                               labelText: "Nome",
                               hintText: "Digete um nome",
-                              iconLabel: Icon(Icons.account_circle, size: 35,),
+                              iconLabel: Icon(
+                                Icons.account_circle,
+                                size: 35,
+                              ),
                               initialValue: _controller.clienteAtual.nome,
                               validator: _controller.validarTexto,
                               onSaved: (value) {
@@ -68,17 +91,25 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
                             NumeroAgendamentoFormField(
                               labelText: "Quantidade cavalo",
                               hintText: "Digete um nome",
-                              iconLabel: Icon(Icons.pets, size: 35,),
-                              initialValue: _controller.clienteAtual.quantidadeCavalos,
+                              iconLabel: Icon(
+                                Icons.pets,
+                                size: 35,
+                              ),
+                              initialValue:
+                                  _controller.clienteAtual.quantidadeCavalos,
                               validator: _controller.validarNumero,
                               onSaved: (value) {
-                                _controller.clienteAtual.quantidadeCavalos = value;
+                                _controller.clienteAtual.quantidadeCavalos =
+                                    value;
                               },
                             ),
                             NumeroAgendamentoFormField(
                               labelText: "Frequência",
                               hintText: "Digete a frequência em dias",
-                              iconLabel: Icon(Icons.replay, size: 35,),
+                              iconLabel: Icon(
+                                Icons.replay,
+                                size: 35,
+                              ),
                               initialValue: _controller.clienteAtual.frequencia,
                               validator: _controller.validarNumero,
                               onSaved: (value) {
@@ -88,92 +119,109 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
                             TextoAgendamentoFormField(
                               labelText: "Local Padrão",
                               hintText: "Digete um local padrão de atendimento",
-                              iconLabel: Icon(Icons.pin_drop, size: 35,),
-                              initialValue: _controller.clienteAtual.localPadrao,
+                              iconLabel: Icon(
+                                Icons.pin_drop,
+                                size: 35,
+                              ),
+                              initialValue:
+                                  _controller.clienteAtual.localPadrao,
                               validator: _controller.validarTexto,
                               onSaved: (value) {
                                 _controller.clienteAtual.localPadrao = value;
                               },
                             ),
                             DinheiroAgendamentoFormField(
-                              labelText: "Valor da divida",
-                              hintText: "Digete o valor da divida do cliente",
-                              initialValue: _controller.clienteAtual.valorDivida,
+                              labelText: "Valor",
+                              hintText: "Digete o valor",
+                              initialValue:
+                                  _controller.clienteAtual.valorDivida,
                               onSaved: (value) {
                                 _controller.clienteAtual.valorDivida = value;
                               },
                             ),
                           ],
-                        ),                
+                        ),
                       ),
-                    )
-                  );
-                }),
-                Observer(builder: (_){
-                  return _controller.clienteAtual==null || (_controller.clienteAtual!=null && _controller.clienteAtual.isNew)?
-                  SizedBox():
-                  Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    child:Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Datas:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,),),
-                          SizedBox(height:10),
-                          Row(
+                    ));
+              }),
+              Observer(builder: (_) {
+                return clienteExiste()
+                    ? Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text("Ultimo agendamento: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                              Container(
-                                child: _controller.ultimoAgendamento==null?
-                                    Center(
-                                      child: Text("Não possui"),
-                                    ):
-                                    Text("${_controller.ultimoAgendamento.formatar(DateFormat.YEAR_MONTH_DAY)}"),
+                              Text(
+                                "Datas:",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
                               ),
+                              SizedBox(height: 10),
+                              Row(
+                                children: <Widget>[
+                                  Text("Ultimo agendamento: ",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  Container(
+                                    child: _controller.ultimoAgendamento == null
+                                        ? Center(
+                                            child: Text("Não possui"),
+                                          )
+                                        : Text(
+                                            "${_controller.ultimoAgendamento.formatar(DateFormat.YEAR_MONTH_DAY)}"),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Text("Próxima data agendada: ",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                  Container(
+                                    child: _controller.proximoAgendamento ==
+                                            null
+                                        ? Center(
+                                            child: Text("Não possui"),
+                                          )
+                                        : Text(
+                                            "${_controller.proximoAgendamento.formatar(DateFormat.YEAR_MONTH_DAY)}"),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
-                          Row(
-                            children: <Widget>[
-                              Text("Próxima data agendada: ", style: TextStyle(fontWeight: FontWeight.bold)),
-                              Container(
-                                child: _controller.proximoAgendamento==null?
-                                    Center(
-                                      child: Text("Não possui"),
-                                    ):
-                                    Text("${_controller.proximoAgendamento.formatar(DateFormat.YEAR_MONTH_DAY)}"),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )                           
-                  );
-                }),
-                SizedBox(height: 75,)
-              ],
-            ),
+                        ),
+                      )
+                    : SizedBox();
+              }),
+              SizedBox(
+                height: 75,
+              )
+            ],
           ),
         ),
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
-            _controller.salvar()
-              .then((_) {
-                Get.snackbar(
-                  "Sucesso", 
-                  "Sucesso", 
-                  margin: EdgeInsets.all(5), 
-                  backgroundColor: Colors.green,
-                );
-                Get.toNamed(NamesRoutes.cliente);
-              })
-              .catchError(()=> Get.snackbar("Erro", "Erro" ));
+            _controller.salvar().then((_) {
+              Get.snackbar(
+                "Sucesso",
+                "Sucesso",
+                margin: EdgeInsets.all(5),
+                backgroundColor: Colors.green,
+              );
+              Get.toNamed(NamesRoutes.cliente);
+            }).catchError(() => Get.snackbar("Erro", "Erro"));
           }
         },
       ),

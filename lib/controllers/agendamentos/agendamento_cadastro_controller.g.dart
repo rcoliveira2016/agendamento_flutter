@@ -74,8 +74,8 @@ mixin _$AgendamentoCadastroController on _AgendamentoCadastroController, Store {
   final _$initAsyncAction = AsyncAction('init');
 
   @override
-  Future<void> init(int id) {
-    return _$initAsyncAction.run(() => super.init(id));
+  Future<void> init(int id, int idCliente) {
+    return _$initAsyncAction.run(() => super.init(id, idCliente));
   }
 
   @override
