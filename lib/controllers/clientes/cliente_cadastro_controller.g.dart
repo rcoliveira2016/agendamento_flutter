@@ -27,6 +27,43 @@ mixin _$ClienteCadastroController on _ClienteCadastroController, Store {
     }, _$clienteAtualAtom, name: '${_$clienteAtualAtom.name}_set');
   }
 
+  final _$ultimoAgendamentoAtom =
+      Atom(name: '_ClienteCadastroController.ultimoAgendamento');
+
+  @override
+  DateTime get ultimoAgendamento {
+    _$ultimoAgendamentoAtom.context.enforceReadPolicy(_$ultimoAgendamentoAtom);
+    _$ultimoAgendamentoAtom.reportObserved();
+    return super.ultimoAgendamento;
+  }
+
+  @override
+  set ultimoAgendamento(DateTime value) {
+    _$ultimoAgendamentoAtom.context.conditionallyRunInAction(() {
+      super.ultimoAgendamento = value;
+      _$ultimoAgendamentoAtom.reportChanged();
+    }, _$ultimoAgendamentoAtom, name: '${_$ultimoAgendamentoAtom.name}_set');
+  }
+
+  final _$proximoAgendamentoAtom =
+      Atom(name: '_ClienteCadastroController.proximoAgendamento');
+
+  @override
+  DateTime get proximoAgendamento {
+    _$proximoAgendamentoAtom.context
+        .enforceReadPolicy(_$proximoAgendamentoAtom);
+    _$proximoAgendamentoAtom.reportObserved();
+    return super.proximoAgendamento;
+  }
+
+  @override
+  set proximoAgendamento(DateTime value) {
+    _$proximoAgendamentoAtom.context.conditionallyRunInAction(() {
+      super.proximoAgendamento = value;
+      _$proximoAgendamentoAtom.reportChanged();
+    }, _$proximoAgendamentoAtom, name: '${_$proximoAgendamentoAtom.name}_set');
+  }
+
   final _$buscarClienteAsyncAction = AsyncAction('buscarCliente');
 
   @override
@@ -36,7 +73,8 @@ mixin _$ClienteCadastroController on _ClienteCadastroController, Store {
 
   @override
   String toString() {
-    final string = 'clienteAtual: ${clienteAtual.toString()}';
+    final string =
+        'clienteAtual: ${clienteAtual.toString()},ultimoAgendamento: ${ultimoAgendamento.toString()},proximoAgendamento: ${proximoAgendamento.toString()}';
     return '{$string}';
   }
 }

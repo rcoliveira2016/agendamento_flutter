@@ -6,6 +6,18 @@ class ClienteRepository extends RepositoryBase<Cliente>{
   ClienteRepository():super(nameTable:"cliente");
 
   @override
-  Cliente map(Map<String, dynamic> json) => Cliente.fromJson(json);
-  
+  Cliente map(Map<String, dynamic> json) => Cliente.fromJson(json);    
+
+  Future<List<Cliente>> buscarClientes(String nome){
+    nome = "%$nome%";
+    return getAll('''
+      select 
+        *
+      from
+        $nameTable
+      where ? is null or nome like ?
+      order by nome
+    ''',[nome,nome]);
+  }
+
 }

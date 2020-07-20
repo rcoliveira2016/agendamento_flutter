@@ -9,6 +9,44 @@ class AgendamentoListagemReadRepository
   AgendamentoListagemModel map(Map<String, dynamic> json) =>
       AgendamentoListagemModel.fromJson(json);
 
+  Future<DateTime> buscarProximoAgendamento(int idCliente) async {
+      var result = await getAll('''
+        select
+          1 as marcado, 
+          agendamento.id, 
+          idCliente, 
+          (max(dataNumero)+(cliente.frequencia*24*60*60*1000)) as dataNumero, 
+          quantidade, 
+          valor,
+          '' as nomeCliente
+        from 
+          agendamento, cliente
+        where 
+          cliente.id = agendamento.idCliente
+          and idCliente = ?
+        order by dataNumero desc''',
+        [idCliente]);
+      return result.isNotEmpty? result.first.data: null;
+    }
+
+  Future<DateTime> buscarUltimoAgendamento(int idCliente) async {
+      var result = await getAll('''
+        select
+          1 as marcado, 
+          id, 
+          idCliente, 
+          dataNumero, 
+          quantidade, 
+          valor,
+          '' as nomeCliente
+        from 
+          agendamento 
+        where idCliente = ?
+        order by dataNumero desc''',
+        [idCliente]);
+      return result.isNotEmpty? result.first.data: null;
+    }
+
   Future<List<AgendamentoListagemModel>> buscarAgendamentoNaoAgendado(
       DateTime dataInicial, DateTime dataFinal) async {
     
@@ -20,8 +58,7 @@ class AgendamentoListagemReadRepository
       dataFimMilliSecondsS.millisecondsSinceEpoch,
       dataInicioMilliSecondsS.millisecondsSinceEpoch,
       dataFimMilliSecondsS.millisecondsSinceEpoch
-    ];
-
+    ];    
     return getAll('''
       Select 
         1 as marcado, 
@@ -30,7 +67,7 @@ class AgendamentoListagemReadRepository
         dataNumero, 
         quantidade, 
         valor,
-        (Select cliente.nome from cliente where cliente.id = idCliente LIMIT 1) as nomeCliente
+        COALESCE((Select cliente.nome from cliente where cliente.id = idCliente LIMIT 1), 'Usuario Excluido') as nomeCliente
       from agendamento
       where
         dataNumero BETWEEN ? and ?

@@ -1,4 +1,5 @@
 import 'package:agendamentos/models/clientes/cliente_model.dart';
+import 'package:agendamentos/repositories/agendamentos/agendamento_listagem_read_repository.dart';
 import 'package:agendamentos/repositories/clientes/cliente_repository.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:mobx/mobx.dart';
@@ -8,14 +9,28 @@ class ClienteCadastroController = _ClienteCadastroController with _$ClienteCadas
 
 abstract class _ClienteCadastroController with Store {
     final ClienteRepository _clienteRepository = Injection.injector.get();
+    final AgendamentoListagemReadRepository _agendamentoListagemReadRepository = Injection.injector.get();
     @observable
     Cliente clienteAtual;
+    @observable
+    DateTime ultimoAgendamento;
+     @observable
+    DateTime proximoAgendamento;
 
     @action
     buscarCliente(int id) async {
       clienteAtual = (id!=null && id > 0)?        
         await _clienteRepository.getId(id):
         Cliente();
+
+        await buscarDatas();
+    }
+
+    Future buscarDatas() async {
+      if(clienteAtual.isNew) return;
+
+      ultimoAgendamento = await _agendamentoListagemReadRepository.buscarUltimoAgendamento(clienteAtual.id);
+      proximoAgendamento = await _agendamentoListagemReadRepository.buscarProximoAgendamento(clienteAtual.id);
     }
 
     String validarTexto(String texto){
@@ -38,4 +53,5 @@ abstract class _ClienteCadastroController with Store {
       else
         await _clienteRepository.updade(clienteAtual.id, clienteAtual);
     }
+    
 }

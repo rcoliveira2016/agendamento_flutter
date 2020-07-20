@@ -8,6 +8,9 @@ import 'package:agendamentos/widgets/scaffold/app_bar_defalt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:agendamentos/shared/extension/date_time_extension.dart';
+import 'package:mobx/mobx.dart';
 
 class ClienteCadastroView extends StatefulWidget {
   int id;
@@ -33,76 +36,125 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
       body: SingleChildScrollView(
         child:Padding(
             padding: const EdgeInsets.all(6.0),
-            child: Observer(builder: (_) {
-              if (_controller.clienteAtual == null) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-                    child: Form(
-                      key: _formKey,
+            child: Column(
+              children: <Widget>[
+
+                Observer(builder: (_) {
+                  if (_controller.clienteAtual == null) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                          children: <Widget>[
+                            TextoAgendamentoFormField(
+                              labelText: "Nome",
+                              hintText: "Digete um nome",
+                              iconLabel: Icon(Icons.account_circle, size: 35,),
+                              initialValue: _controller.clienteAtual.nome,
+                              validator: _controller.validarTexto,
+                              onSaved: (value) {
+                                _controller.clienteAtual.nome = value;
+                              },
+                            ),
+                            NumeroAgendamentoFormField(
+                              labelText: "Quantidade cavalo",
+                              hintText: "Digete um nome",
+                              iconLabel: Icon(Icons.pets, size: 35,),
+                              initialValue: _controller.clienteAtual.quantidadeCavalos,
+                              validator: _controller.validarNumero,
+                              onSaved: (value) {
+                                _controller.clienteAtual.quantidadeCavalos = value;
+                              },
+                            ),
+                            NumeroAgendamentoFormField(
+                              labelText: "Frequência",
+                              hintText: "Digete a frequência em dias",
+                              iconLabel: Icon(Icons.replay, size: 35,),
+                              initialValue: _controller.clienteAtual.frequencia,
+                              validator: _controller.validarNumero,
+                              onSaved: (value) {
+                                _controller.clienteAtual.frequencia = value;
+                              },
+                            ),
+                            TextoAgendamentoFormField(
+                              labelText: "Local Padrão",
+                              hintText: "Digete um local padrão de atendimento",
+                              iconLabel: Icon(Icons.pin_drop, size: 35,),
+                              initialValue: _controller.clienteAtual.localPadrao,
+                              validator: _controller.validarTexto,
+                              onSaved: (value) {
+                                _controller.clienteAtual.localPadrao = value;
+                              },
+                            ),
+                            DinheiroAgendamentoFormField(
+                              labelText: "Valor da divida",
+                              hintText: "Digete o valor da divida do cliente",
+                              initialValue: _controller.clienteAtual.valorDivida,
+                              onSaved: (value) {
+                                _controller.clienteAtual.valorDivida = value;
+                              },
+                            ),
+                          ],
+                        ),                
+                      ),
+                    )
+                  );
+                }),
+                Observer(builder: (_){
+                  return _controller.clienteAtual==null || (_controller.clienteAtual!=null && _controller.clienteAtual.isNew)?
+                  SizedBox():
+                  Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    child:Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Column(
-                      children: <Widget>[
-                        TextoAgendamentoFormField(
-                          labelText: "Nome",
-                          hintText: "Digete um nome",
-                          iconLabel: Icon(Icons.account_circle, size: 35,),
-                          initialValue: _controller.clienteAtual.nome,
-                          validator: _controller.validarTexto,
-                          onSaved: (value) {
-                            _controller.clienteAtual.nome = value;
-                          },
-                        ),
-                        NumeroAgendamentoFormField(
-                          labelText: "Quantidade cavalo",
-                          hintText: "Digete um nome",
-                          iconLabel: Icon(Icons.pets, size: 35,),
-                          initialValue: _controller.clienteAtual.quantidadeCavalos,
-                          validator: _controller.validarNumero,
-                          onSaved: (value) {
-                            _controller.clienteAtual.quantidadeCavalos = value;
-                          },
-                        ),
-                        NumeroAgendamentoFormField(
-                          labelText: "Frequência",
-                          hintText: "Digete a frequência em dias",
-                          iconLabel: Icon(Icons.replay, size: 35,),
-                          initialValue: _controller.clienteAtual.frequencia,
-                          validator: _controller.validarNumero,
-                          onSaved: (value) {
-                            _controller.clienteAtual.frequencia = value;
-                          },
-                        ),
-                        TextoAgendamentoFormField(
-                          labelText: "Local Padrão",
-                          hintText: "Digete um local padrão de atendimento",
-                          iconLabel: Icon(Icons.pin_drop, size: 35,),
-                          initialValue: _controller.clienteAtual.localPadrao,
-                          validator: _controller.validarTexto,
-                          onSaved: (value) {
-                            _controller.clienteAtual.localPadrao = value;
-                          },
-                        ),
-                        DinheiroAgendamentoFormField(
-                          labelText: "Valor da divida",
-                          hintText: "Digete o valor da divida do cliente",
-                          initialValue: _controller.clienteAtual.valorDivida,
-                          onSaved: (value) {
-                            _controller.clienteAtual.valorDivida = value;
-                          },
-                        ),
-                      ],
-                    ),                
-                  ),
-                )
-              );
-            }),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text("Datas:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,),),
+                          SizedBox(height:10),
+                          Row(
+                            children: <Widget>[
+                              Text("Ultimo agendamento: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                              Container(
+                                child: _controller.ultimoAgendamento==null?
+                                    Center(
+                                      child: Text("Não possui"),
+                                    ):
+                                    Text("${_controller.ultimoAgendamento.formatar(DateFormat.YEAR_MONTH_DAY)}"),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Text("Próxima data agendada: ", style: TextStyle(fontWeight: FontWeight.bold)),
+                              Container(
+                                child: _controller.proximoAgendamento==null?
+                                    Center(
+                                      child: Text("Não possui"),
+                                    ):
+                                    Text("${_controller.proximoAgendamento.formatar(DateFormat.YEAR_MONTH_DAY)}"),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    )                           
+                  );
+                }),
+                SizedBox(height: 75,)
+              ],
+            ),
           ),
         ),
       floatingActionButton: FloatingActionButton(
@@ -125,6 +177,7 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
           }
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

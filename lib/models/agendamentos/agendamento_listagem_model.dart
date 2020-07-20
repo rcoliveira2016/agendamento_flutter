@@ -11,7 +11,8 @@ class AgendamentoListagemModel {
 
   AgendamentoListagemModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    data = DateTime.fromMillisecondsSinceEpoch(json['dataNumero']);
+    if(json['dataNumero']!=null)
+      data = DateTime.fromMillisecondsSinceEpoch(json['dataNumero']);
     quantidade = json['quantidade'];
     valor = json['valor'];
     idCliente = json['idCliente'];

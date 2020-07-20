@@ -20,4 +20,8 @@ abstract class RepositoryReadBase<TEntidade>  {
     list.forEach((x)=> result.add(map(x)));
     return result.toList();
   }
+
+  Future<List<Map>> getRaw(String sql, [List<dynamic> arguments]) async {
+    return await _dataBaseProvider.db.rawQuery(sql, arguments);
+  }
 }

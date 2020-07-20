@@ -38,4 +38,5 @@ abstract class RepositoryBase<TEntidade extends Entidade>  {
     list.forEach((x)=> result.add(map(x)));
     return result.toList();
   }
+  
 }

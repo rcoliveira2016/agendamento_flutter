@@ -84,6 +84,13 @@ mixin _$AgendamentoListagemController
     return _$cadastroAsyncAction.run(() => super.cadastro(model));
   }
 
+  final _$deletarAsyncAction = AsyncAction('deletar');
+
+  @override
+  Future deletar(int id) {
+    return _$deletarAsyncAction.run(() => super.deletar(id));
+  }
+
   @override
   String toString() {
     final string =

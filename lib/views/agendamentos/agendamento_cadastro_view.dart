@@ -92,15 +92,7 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
                             initialValue: _controller.quantidadeCavalos,
                             onSaved: _controller.agendamentoAtual.setQuantidade,
                           );
-                        }),
-                        Observer(builder: (_) {
-                          return DinheiroAgendamentoFormField(
-                            labelText: "Valor da divida",
-                            hintText: "Digete o valor da divida do cliente",
-                            initialValue: _controller.valorCalculado,
-                            onSaved: _controller.agendamentoAtual.setValor,
-                          );
-                        }),
+                        }),                        
                         Observer(builder: (_) {
                           return DatePickerButtom(
                             initialDate: _controller.agendamentoAtual.data,
@@ -126,6 +118,14 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
                             }),
                           ],
                         ),
+                        Observer(builder: (_) {
+                          return DinheiroAgendamentoFormField(
+                            labelText: "Preço cobrado",
+                            hintText: "Digete o valor da ferração",
+                            initialValue: _controller.valorCalculado,
+                            onSaved: _controller.agendamentoAtual.setValor,
+                          );
+                        }),
                       ],
                     ),
                   ),
@@ -142,7 +142,7 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
             _controller.salvar().then((_) {
               Get.snackbar(
                 "Sucesso",
-                "Sucesso",
+                "Agendado com sucesso",
                 margin: EdgeInsets.all(5),
                 backgroundColor: Colors.green,
               );
