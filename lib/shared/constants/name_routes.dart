@@ -11,5 +11,6 @@ class NamesRoutes {
   static const agendamentoAtualizar = '/agendamento/atualizar';
   static const agendamentoCadastrarCliente = '/agendamento/atualizar/porCliente';
   
+  static const exportar = '/exportar/excel';
 
 }
