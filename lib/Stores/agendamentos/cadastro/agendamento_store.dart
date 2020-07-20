@@ -15,6 +15,7 @@ abstract class _AgendamentoStoreBase with Store {
     setQuantidade(agendamento.quantidade);
     setValor(agendamento.valor);
     setIdCliente(agendamento.idCliente);
+    setObservacao(agendamento.observacao);
   }
 
   _AgendamentoStoreBase.criarNovo(){
@@ -47,6 +48,11 @@ abstract class _AgendamentoStoreBase with Store {
   @observable
   Cliente cliente;
   @action
-  void setCliente(Cliente value) => cliente = value;  
+  void setCliente(Cliente value) => cliente = value; 
+
+  @observable
+  String observacao;
+  @action
+  void setObservacao(String value) => observacao = value;  
   
 }

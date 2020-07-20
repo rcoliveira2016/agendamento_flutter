@@ -10,7 +10,9 @@ class TextoAgendamentoFormField extends BaseTextAgendamentoFormField {
     FormFieldSetter<String> onSaved,
     FormFieldValidator<String> validator,
     Icon iconLabel,
-    bool autofocus
+    bool autofocus,  
+    int maxLines,
+    int minLines
   }):super(
     initialValue:initialValue,
     labelText:labelText,
@@ -18,7 +20,9 @@ class TextoAgendamentoFormField extends BaseTextAgendamentoFormField {
     onSaved:onSaved,
     validator:validator,
     iconLabel:iconLabel,
-    autofocus:autofocus
+    autofocus:autofocus,
+    minLines: minLines,
+    maxLines:maxLines
   );
 
 }

@@ -37,7 +37,8 @@ class DataBaseProvider {
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     for (var i = oldVersion - 1; i <= newVersion - 1; i++) {
-      await db.execute(Scripts.migrationScripts[i]);
+      if(i<Scripts.migrationScripts.length)
+        await db.execute(Scripts.migrationScripts[i]);
     }
   }
 }

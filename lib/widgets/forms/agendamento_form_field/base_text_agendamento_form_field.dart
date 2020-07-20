@@ -14,6 +14,8 @@ abstract class BaseTextAgendamentoFormField extends StatefulWidget {
   bool autofocus;
   TextInputType textInputType;
   List<TextInputFormatter> textInputFormatters;
+  int maxLines;
+  int minLines;
 
   BaseTextAgendamentoFormField({
     this.initialValue,
@@ -26,6 +28,8 @@ abstract class BaseTextAgendamentoFormField extends StatefulWidget {
     this.autofocus,
     this.textInputType,
     this.textInputFormatters,
+    this.maxLines,
+    this.minLines,
   });
 
   @override
@@ -49,6 +53,8 @@ class _BaseTextAgendamentoFormFieldState extends State<BaseTextAgendamentoFormFi
             onChanged: widget.onChanged,
             inputFormatters: widget.textInputFormatters==null || widget.textInputFormatters.isEmpty ? null: widget.textInputFormatters,
             keyboardType: widget.textInputType,
+            maxLines: widget.maxLines,
+            minLines: widget.minLines,
           );
   }
 }

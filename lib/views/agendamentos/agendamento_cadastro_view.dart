@@ -4,6 +4,7 @@ import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:agendamentos/widgets/date_picker/date_picker_buttom.dart';
 import 'package:agendamentos/widgets/forms/agendamento_form_field/dinheiro_agendamento_form_field.dart';
 import 'package:agendamentos/widgets/forms/agendamento_form_field/numero_agendamento_form_field.dart';
+import 'package:agendamentos/widgets/forms/agendamento_form_field/texto_agendamento_form_field.dart';
 import 'package:agendamentos/widgets/scaffold/app_bar_defalt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,20 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
                             initialValue: _controller.quantidadeCavalos,
                             onSaved: _controller.agendamentoAtual.setQuantidade,
                           );
-                        }),                        
+                        }),
+                        Observer(builder: (_) {
+                          return TextoAgendamentoFormField(
+                              labelText: "Observações",
+                              hintText: "Digete suas observações",
+                              iconLabel: Icon(
+                                Icons.add_comment,
+                                size: 35,
+                              ),
+                              initialValue: _controller.agendamentoAtual.observacao,
+                              onSaved: _controller.agendamentoAtual.setObservacao,
+                              minLines: 1,
+                            );
+                        }),                       
                         Observer(builder: (_) {
                           return DatePickerButtom(
                             initialDate: _controller.agendamentoAtual.data,

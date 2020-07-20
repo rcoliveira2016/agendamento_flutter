@@ -82,7 +82,8 @@ abstract class _AgendamentoCadastroController with Store {
         id: agendamentoAtual.id,
         idCliente: agendamentoAtual.idCliente,
         quantidade: agendamentoAtual.quantidade,
-        valor: agendamentoAtual.valor
+        valor: agendamentoAtual.valor,
+        observacao: agendamentoAtual.observacao
       );
       if(salvaModelo.isNew)
         await _agendamentoRepository.add(salvaModelo);

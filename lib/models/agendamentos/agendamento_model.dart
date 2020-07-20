@@ -6,6 +6,7 @@ class Agendamento extends Entidade {
   int quantidade;
   double valor;
   int idCliente;
+  String observacao;
 
   int dataNumero;
   Cliente cliente;
@@ -15,7 +16,8 @@ class Agendamento extends Entidade {
     this.data, 
     this.quantidade, 
     this.valor, 
-    this.idCliente, 
+    this.idCliente,
+    this.observacao 
   }):super(id:id);
 
   adicionarCliente(Cliente cliente){
@@ -23,11 +25,13 @@ class Agendamento extends Entidade {
   }
 
   Agendamento.fromJson(Map<String, dynamic> json) {
+    print(json);
     id = json['id'];
     data = DateTime.fromMillisecondsSinceEpoch(json['dataNumero']);
     quantidade = json['quantidade'];
     valor = json['valor'];
     idCliente = json['idCliente'];
+    observacao = json['observacao'];
   }
 
   Map<String, dynamic> toJson() {
@@ -37,6 +41,8 @@ class Agendamento extends Entidade {
     data['quantidade'] = this.quantidade;
     data['valor'] = this.valor;
     data['idCliente'] = this.idCliente;
+    data['observacao'] = this.observacao;
+    print(this);
     return data;
   }
 
