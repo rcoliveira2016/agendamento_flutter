@@ -67,8 +67,15 @@ class DrawerDefalt extends StatelessWidget {
             onTap: () async {
               Get.snackbar("Exportando", "Arquivo está sendo exportado",backgroundColor: Colors.deepOrange,);
               var exportar = Injection.injector.get<ExprotarExcelController>();
-              await exportar.exportarTodosDadosExcel();              
-              Get.snackbar("Sucesso", "Arquivo gerado com sucesso",backgroundColor: Colors.green,);
+              exportar.exportarTodosDadosExcel().then((_){
+                if(_ != null)
+                  Get.snackbar("Sucesso", "Arquivo gerado com sucesso",backgroundColor: Colors.green,);
+                else 
+                  Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
+              })
+              .catchError((_){
+                Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
+              });
             },
           ),
         ],

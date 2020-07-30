@@ -25,13 +25,13 @@ class _DatePickerButtomState extends State<DatePickerButtom> {
         color: Colors.transparent,
         child: Row(
           children: <Widget>[
-            Icon(Icons.calendar_today),
+            Icon(Icons.calendar_today,color: Theme.of(context).hintColor,),
             SizedBox(
               width: 25,
             ),
             Text(
               widget.initialDate.formatar(DateFormat.YEAR_MONTH_DAY),
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18,color: Theme.of(context).hintColor,),
             ),
           ],
         ),

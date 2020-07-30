@@ -1,3 +1,6 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:agendamentos/controllers/clientes/cliente_cadastro_controller.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
@@ -10,7 +13,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:agendamentos/shared/extension/date_time_extension.dart';
-import 'package:mobx/mobx.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:wc_flutter_share/wc_flutter_share.dart';
 
 class ClienteCadastroView extends StatefulWidget {
   int id;
@@ -22,7 +26,7 @@ class ClienteCadastroView extends StatefulWidget {
 class _ClienteCadastroStateView extends State<ClienteCadastroView> {
   final _formKey = GlobalKey<FormState>();
   final ClienteCadastroController _controller = Injection.injector.get();
-
+  final screenshotController = ScreenshotController();
   @override
   void initState() {
     super.initState();
@@ -50,160 +54,185 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
                       arguments: _controller.clienteAtual.id);
               },
             );
+          }),
+          Observer(builder: (_) {
+            if (!clienteExiste()) return SizedBox();
+            return IconButton(
+              icon: Icon(Icons.share),
+              onPressed: () async {
+                if (!clienteExiste()) return;
+                
+                var imagem = await screenshotController.captureAsUiImage();
+                var bytes =
+                    await imagem.toByteData(format: ImageByteFormat.png);
+                await WcFlutterShare.share(
+                    sharePopupTitle: 'Agendamento',
+                    fileName: '${new Random().nextInt(15)}.png',
+                    mimeType: 'image/png',
+                    bytesOfFile: bytes.buffer.asUint8List());
+              },
+            );
           })
         ],
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Column(
-            children: <Widget>[
-              Observer(builder: (_) {
-                if (_controller.clienteAtual == null) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12, horizontal: 6),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: <Widget>[
-                            TextoAgendamentoFormField(
-                              labelText: "Nome",
-                              hintText: "Digete um nome",
-                              iconLabel: Icon(
-                                Icons.account_circle,
-                                size: 35,
-                              ),
-                              initialValue: _controller.clienteAtual.nome,
-                              validator: _controller.validarTexto,
-                              onSaved: (value) {
-                                _controller.clienteAtual.nome = value;
-                              },
-                            ),
-                            NumeroAgendamentoFormField(
-                              labelText: "Quantidade cavalo",
-                              hintText: "Digete um nome",
-                              iconLabel: Icon(
-                                Icons.pets,
-                                size: 35,
-                              ),
-                              initialValue:
-                                  _controller.clienteAtual.quantidadeCavalos,
-                              validator: _controller.validarNumero,
-                              onSaved: (value) {
-                                _controller.clienteAtual.quantidadeCavalos =
-                                    value;
-                              },
-                            ),
-                            NumeroAgendamentoFormField(
-                              labelText: "Frequência",
-                              hintText: "Digete a frequência em dias",
-                              iconLabel: Icon(
-                                Icons.replay,
-                                size: 35,
-                              ),
-                              initialValue: _controller.clienteAtual.frequencia,
-                              validator: _controller.validarNumero,
-                              onSaved: (value) {
-                                _controller.clienteAtual.frequencia = value;
-                              },
-                            ),
-                            TextoAgendamentoFormField(
-                              labelText: "Local Padrão",
-                              hintText: "Digete um local padrão de atendimento",
-                              iconLabel: Icon(
-                                Icons.pin_drop,
-                                size: 35,
-                              ),
-                              initialValue:
-                                  _controller.clienteAtual.localPadrao,
-                              validator: _controller.validarTexto,
-                              onSaved: (value) {
-                                _controller.clienteAtual.localPadrao = value;
-                              },
-                            ),
-                            DinheiroAgendamentoFormField(
-                              labelText: "Valor",
-                              hintText: "Digete o valor",
-                              initialValue:
-                                  _controller.clienteAtual.valorDivida,
-                              onSaved: (value) {
-                                _controller.clienteAtual.valorDivida = value;
-                              },
-                            ),
-                          ],
-                        ),
+        child: Screenshot(
+          controller: screenshotController,
+          child: Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            padding: const EdgeInsets.all(6.0),
+            child: Column(
+              children: <Widget>[
+                Observer(builder: (_) {
+                  if (_controller.clienteAtual == null) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                    ));
-              }),
-              Observer(builder: (_) {
-                return clienteExiste()
-                    ? Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 6),
+                        child: Form(
+                          key: _formKey,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                "Datas:",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                              TextoAgendamentoFormField(
+                                labelText: "Nome",
+                                hintText: "Digete um nome",
+                                iconLabel: Icon(
+                                  Icons.account_circle,
+                                  size: 35,
                                 ),
+                                initialValue: _controller.clienteAtual.nome,
+                                validator: _controller.validarTexto,
+                                onSaved: (value) {
+                                  _controller.clienteAtual.nome = value;
+                                },
                               ),
-                              SizedBox(height: 10),
-                              Row(
-                                children: <Widget>[
-                                  Text("Ultimo agendamento: ",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  Container(
-                                    child: _controller.ultimoAgendamento == null
-                                        ? Center(
-                                            child: Text("Não possui"),
-                                          )
-                                        : Text(
-                                            "${_controller.ultimoAgendamento.formatar(DateFormat.YEAR_MONTH_DAY)}"),
-                                  ),
-                                ],
+                              NumeroAgendamentoFormField(
+                                labelText: "Quantidade cavalo",
+                                hintText: "Digete um nome",
+                                iconLabel: Icon(
+                                  Icons.pets,
+                                  size: 35,
+                                ),
+                                initialValue:
+                                    _controller.clienteAtual.quantidadeCavalos,
+                                validator: _controller.validarNumero,
+                                onSaved: (value) {
+                                  _controller.clienteAtual.quantidadeCavalos =
+                                      value;
+                                },
                               ),
-                              Row(
-                                children: <Widget>[
-                                  Text("Próxima data agendada: ",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  Container(
-                                    child: _controller.proximoAgendamento ==
-                                            null
-                                        ? Center(
-                                            child: Text("Não possui"),
-                                          )
-                                        : Text(
-                                            "${_controller.proximoAgendamento.formatar(DateFormat.YEAR_MONTH_DAY)}"),
-                                  ),
-                                ],
-                              )
+                              NumeroAgendamentoFormField(
+                                labelText: "Frequência",
+                                hintText: "Digete a frequência em dias",
+                                iconLabel: Icon(
+                                  Icons.replay,
+                                  size: 35,
+                                ),
+                                initialValue:
+                                    _controller.clienteAtual.frequencia,
+                                validator: _controller.validarNumero,
+                                onSaved: (value) {
+                                  _controller.clienteAtual.frequencia = value;
+                                },
+                              ),
+                              TextoAgendamentoFormField(
+                                labelText: "Local Padrão",
+                                hintText:
+                                    "Digete um local padrão de atendimento",
+                                iconLabel: Icon(
+                                  Icons.pin_drop,
+                                  size: 35,
+                                ),
+                                initialValue:
+                                    _controller.clienteAtual.localPadrao,
+                                validator: _controller.validarTexto,
+                                onSaved: (value) {
+                                  _controller.clienteAtual.localPadrao = value;
+                                },
+                              ),
+                              DinheiroAgendamentoFormField(
+                                labelText: "Valor",
+                                hintText: "Digete o valor",
+                                initialValue:
+                                    _controller.clienteAtual.valorDivida,
+                                onSaved: (value) {
+                                  _controller.clienteAtual.valorDivida = value;
+                                },
+                              ),
                             ],
                           ),
                         ),
-                      )
-                    : SizedBox();
-              }),
-              SizedBox(
-                height: 75,
-              )
-            ],
+                      ));
+                }),
+                Observer(builder: (_) {
+                  return clienteExiste()
+                      ? Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "Datas:",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  children: <Widget>[
+                                    Text("Ultimo agendamento: ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    Container(
+                                      child: _controller.ultimoAgendamento ==
+                                              null
+                                          ? Center(
+                                              child: Text("Não possui"),
+                                            )
+                                          : Text(
+                                              "${_controller.ultimoAgendamento.formatar(DateFormat.YEAR_MONTH_DAY)}"),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Text("Próxima data agendada: ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    Container(
+                                      child: _controller.proximoAgendamento ==
+                                              null
+                                          ? Center(
+                                              child: Text("Não possui"),
+                                            )
+                                          : Text(
+                                              "${_controller.proximoAgendamento.formatar(DateFormat.YEAR_MONTH_DAY)}"),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      : SizedBox();
+                }),
+                SizedBox(
+                  height: 75,
+                )
+              ],
+            ),
           ),
         ),
       ),

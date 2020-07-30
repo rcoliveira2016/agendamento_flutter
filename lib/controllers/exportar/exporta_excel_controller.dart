@@ -5,30 +5,38 @@ import 'package:csv/csv.dart';
 
 import 'package:agendamentos/repositories/exportar/excel/exporta_excel_repository.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
-import 'package:ext_storage/ext_storage.dart';
+import 'package:downloads_path_provider/downloads_path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:agendamentos/shared/extension/date_time_extension.dart';
 
 class ExprotarExcelController {
   final ExportarExcelRepository _exportarExcelRepository = Injection.injector.get();
 
-  Future exportarTodosDadosExcel() async {
+  Future<String> exportarTodosDadosExcel() async {
     var permissao = await Permission.storage.request();
     if(permissao==PermissionStatus.granted){
 
       var listaTodos = await _exportarExcelRepository.buscarTodos();
       var listaCSV = _obterListaCSV(listaTodos);
-      print(await _getPathToDownload());
-      var file = "${await _getPathToDownload()}/dados_agendamento-${DateTime.now().formatar("y-M-d-H-m-s")}.csv";
+
+      var pastaDestino = await _getPathToDownload();
+
+      var caminhoDoArquivo = "$pastaDestino/dados_agendamento-${DateTime.now().formatar("y-M-d-H-m-s")}.csv";
       
       var rowsAsListOfValues = const ListToCsvConverter().convert(listaCSV);
 
-      await new File(file).writeAsString(rowsAsListOfValues);
+      var criarArquivo = await new File(caminhoDoArquivo).create(recursive: true);
+      var novoArquivo = await (criarArquivo.writeAsString(rowsAsListOfValues));
+      if(await novoArquivo.exists())
+        return novoArquivo.path;
+      
+      return null;
     }
   }
   
   Future<String> _getPathToDownload() async {
-    return await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_DOWNLOADS);
+    var pasta = await DownloadsPathProvider.downloadsDirectory;
+    return pasta.path;
   }
 
   List<List<dynamic>> _obterListaCSV(List<TodosDadosModel> listaTodos) {

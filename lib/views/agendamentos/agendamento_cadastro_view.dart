@@ -1,3 +1,6 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:agendamentos/controllers/agendamentos/agendamento_cadastro_controller.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
@@ -10,11 +13,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:wc_flutter_share/wc_flutter_share.dart';
 
 class AgendamentoCadastroView extends StatefulWidget {
   int id;
   int idCliente;
-  AgendamentoCadastroView({this.id,this.idCliente});
+  AgendamentoCadastroView({this.id, this.idCliente});
   @override
   _AgendamentoCadastroStateView createState() =>
       _AgendamentoCadastroStateView();
@@ -23,6 +28,7 @@ class AgendamentoCadastroView extends StatefulWidget {
 class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
   final _formKey = GlobalKey<FormState>();
   final AgendamentoCadastroController _controller = Injection.injector.get();
+  final screenshotController = ScreenshotController();
 
   @override
   void initState() {
@@ -33,119 +39,134 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarDefalt(title: "Agendamento", actions:_boataoDeletar()),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Observer(builder: (_) {
-            if (_controller.agendamentoAtual == null) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: <Widget>[
-                        Observer(builder: (_) {
-                          return _controller.itemsClientes.isEmpty
-                              ? CircularProgressIndicator()
-                              : DropdownButtonFormField<int>(
-                                  items: _controller.itemsClientes
-                                      .map((label) => DropdownMenuItem<int>(
-                                            child: Row(
-                                              children: <Widget>[
-                                                label.devendo
-                                                    ? Icon(
-                                                        Icons.money_off,
-                                                        color: Colors.red,
-                                                        size: 25,
-                                                      )
-                                                    : Icon(
-                                                        Icons.attach_money,
-                                                        color: Colors.green,
-                                                        size: 25,
-                                                      ),
-                                                Text(label.nome)
-                                              ],
-                                            ),
-                                            value: label.id,
-                                          ))
-                                      .toList(),
-                                  onChanged: _controller.setarCliente,
-                                  value: _controller.agendamentoAtual.idCliente,
-                                );
-                        }),
-                        Observer(builder: (_) {
-                          return NumeroAgendamentoFormField(
-                            labelText: "Quantidade cavalo",
-                            hintText: "Digete um nome",
-                            iconLabel: Icon(
-                              Icons.pets,
-                              size: 35,
-                            ),
-                            initialValue: _controller.quantidadeCavalos,
-                            onSaved: _controller.agendamentoAtual.setQuantidade,
-                          );
-                        }),
-                        Observer(builder: (_) {
-                          return TextoAgendamentoFormField(
+      appBar: AppBarDefalt(title: "Agendamento", actions: _boataoDeletar()),
+      body: Screenshot(
+        controller: screenshotController,
+        child: SingleChildScrollView(
+          child: Container(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            padding: const EdgeInsets.all(6.0),
+            child: Observer(builder: (_) {
+              if (_controller.agendamentoAtual == null) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            child: Observer(builder: (_) {
+                              return _controller.itemsClientes.isEmpty
+                                  ? CircularProgressIndicator()
+                                  : DropdownButtonFormField<int>(
+                                      items: _controller.itemsClientes
+                                          .map((label) => DropdownMenuItem<int>(
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    label.devendo
+                                                        ? Icon(
+                                                            Icons.money_off,
+                                                            color: Colors.red,
+                                                            size: 25,
+                                                          )
+                                                        : Icon(
+                                                            Icons.attach_money,
+                                                            color: Colors.green,
+                                                            size: 25,
+                                                          ),
+                                                    Text(label.nome)
+                                                  ],
+                                                ),
+                                                value: label.id,
+                                              ))
+                                          .toList(),
+                                      onChanged: _controller.setarCliente,
+                                      value:
+                                          _controller.agendamentoAtual.idCliente,
+                                    );
+                            }),
+                          ),
+                          Observer(builder: (_) {
+                            return NumeroAgendamentoFormField(
+                              labelText: "Quantidade cavalo",
+                              hintText: "Digete um nome",
+                              iconLabel: Icon(
+                                Icons.pets,
+                                size: 35,
+                              ),
+                              initialValue: _controller.quantidadeCavalos,
+                              onSaved:
+                                  _controller.agendamentoAtual.setQuantidade,
+                            );
+                          }),
+                          Observer(builder: (_) {
+                            return TextoAgendamentoFormField(
                               labelText: "Observações",
                               hintText: "Digete suas observações",
                               iconLabel: Icon(
                                 Icons.add_comment,
                                 size: 35,
                               ),
-                              initialValue: _controller.agendamentoAtual.observacao,
-                              onSaved: _controller.agendamentoAtual.setObservacao,
+                              initialValue:
+                                  _controller.agendamentoAtual.observacao,
+                              onSaved:
+                                  _controller.agendamentoAtual.setObservacao,
                               minLines: 1,
                             );
-                        }),                       
-                        Observer(builder: (_) {
-                          return DatePickerButtom(
-                            initialDate: _controller.agendamentoAtual.data,
-                            onChage: _controller.agendamentoAtual.setData,
-                          );
-                        }),
-                        Row(
-                          children: <Widget>[
-                            Icon(Icons.pin_drop),
-                            SizedBox(
-                              width: 27,
-                            ),
-                            Text(
-                              "Local: ",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 17.5),
-                            ),
-                            Observer(builder: (_) {
-                              return Text(
-                                _controller.localPadrao,
-                                style: TextStyle(fontSize: 17.5),
-                              );
-                            }),
-                          ],
-                        ),
-                        Observer(builder: (_) {
-                          return DinheiroAgendamentoFormField(
-                            labelText: "Preço cobrado",
-                            hintText: "Digete o valor da ferração",
-                            initialValue: _controller.valorCalculado,
-                            onSaved: _controller.agendamentoAtual.setValor,
-                          );
-                        }),
-                      ],
+                          }),
+                          Observer(builder: (_) {
+                            return DatePickerButtom(
+                              initialDate: _controller.agendamentoAtual.data,
+                              onChage: _controller.agendamentoAtual.setData,
+                            );
+                          }),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Icon(Icons.pin_drop,color: Theme.of(context).hintColor,),
+                              SizedBox(
+                                width: 27,
+                              ),
+                              Text(
+                                "Local: ",
+                                style: TextStyle(
+                                    color: Theme.of(context).hintColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17.5),
+                              ),
+                              Observer(builder: (_) {
+                                return Flexible(
+                                  child: Text(
+                                    "${_controller.localPadrao}",
+                                    style: TextStyle(fontSize: 17.5, color: Theme.of(context).hintColor),
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                          Observer(builder: (_) {
+                            return DinheiroAgendamentoFormField(
+                              labelText: "Preço cobrado",
+                              hintText: "Digete o valor da ferração",
+                              initialValue: _controller.valorCalculado,
+                              onSaved: _controller.agendamentoAtual.setValor,
+                            );
+                          }),
+                        ],
+                      ),
                     ),
-                  ),
-                ));
-          }),
+                  ));
+            }),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -171,31 +192,47 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
 
   _boataoDeletar() {
     return <Widget>[
-        Observer(builder: (_)
-        {
-          return _controller?.agendamentoAtual?.id==null?SizedBox(): IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: () {
-            Get.defaultDialog(
-              title: "Agendamento",
-              content: Container(
-                child: Text("Deseja excluir o agendamento."),
-              ),
-              cancel: FlatButton(
-                child: Text("Não"),
-                onPressed: () => Get.back(),
-              ),
-              confirm: FlatButton(
-                child: Text("Sim"),
+      Observer(builder: (_) {
+        return _controller?.agendamentoAtual?.id == null
+            ? SizedBox()
+            : IconButton(
+                icon: Icon(Icons.delete),
                 onPressed: () {
-                  _controller.deletar(_controller.agendamentoAtual.id);
-                  Get.offNamed(NamesRoutes.agendamento);
+                  Get.defaultDialog(
+                    title: "Agendamento",
+                    content: Container(
+                      child: Text("Deseja excluir o agendamento."),
+                    ),
+                    cancel: FlatButton(
+                      child: Text("Não"),
+                      onPressed: () => Get.back(),
+                    ),
+                    confirm: FlatButton(
+                      child: Text("Sim"),
+                      onPressed: () {
+                        _controller.deletar(_controller.agendamentoAtual.id);
+                        Get.offNamed(NamesRoutes.agendamento);
+                      },
+                    ),
+                  );
                 },
-              ),
-            );
+              );
+      }),
+      Observer(builder: (_) {
+        if (_controller?.agendamentoAtual?.id == null) return SizedBox();
+        return IconButton(
+          icon: Icon(Icons.share),
+          onPressed: () async {
+            var imagem = await screenshotController.captureAsUiImage();
+            var bytes = await imagem.toByteData(format: ImageByteFormat.png);
+            await WcFlutterShare.share(
+                sharePopupTitle: 'Agendamento',
+                fileName: '${new Random().nextInt(15)}.png',
+                mimeType: 'image/png',
+                bytesOfFile: bytes.buffer.asUint8List());
           },
         );
-        })
-      ];
+      })
+    ];
   }
 }
