@@ -6,6 +6,7 @@ import 'package:agendamentos/controllers/clientes/cliente_cadastro_controller.da
 import 'package:agendamentos/controllers/clientes/cliente_listagem_controller.dart';
 import 'package:agendamentos/controllers/exportar/exporta_excel_controller.dart';
 import 'package:agendamentos/repositories/agendamentos/agendamento_listagem_read_repository.dart';
+import 'package:agendamentos/repositories/aplicativo/termo_uso_repository.dart';
 import 'package:agendamentos/repositories/exportar/excel/exporta_excel_repository.dart';
 import 'package:flutter_simple_dependency_injection/injector.dart';
 import 'package:agendamentos/repositories/agendamentos/agendamento_repository.dart';
@@ -44,7 +45,8 @@ class Injection {
     injector.map<AgendamentoListagemController>((i) => new AgendamentoListagemController(), isSingleton: false);
     injector.map<AgendamentoCadastroController>((i) => new AgendamentoCadastroController(), isSingleton: false);
 
-    injector.map<ExprotarExcelController>((i) => new ExprotarExcelController(), isSingleton: true);
+    injector.map<ExprotarExcelController>((i) => new ExprotarExcelController(), isSingleton: false);
+    injector.map<TermoUsoRepository>((i) => new TermoUsoRepository(), isSingleton: true);
   }
 
 }

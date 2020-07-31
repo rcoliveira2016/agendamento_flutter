@@ -46,10 +46,6 @@ class DrawerDefalt extends StatelessWidget {
               Get.toNamed(NamesRoutes.cliente);
             },
           ),
-          Divider(
-            height: 3,
-            color: Colors.black26,
-          ),
           ListTile(
             leading: Icon(Icons.calendar_today),
             title: Text('Agendamento'),
@@ -57,25 +53,55 @@ class DrawerDefalt extends StatelessWidget {
               Get.toNamed(NamesRoutes.agendamento);
             },
           ),
-          Divider(
-            height: 3,
-            color: Colors.black26,
+          ExpansionTile(
+            title: new Text("Exportar"),
+            leading: Icon(Icons.screen_share),
+            children: <Widget>[
+              ListTile(
+                title: Text('Excel'),
+                onTap: () async {
+                  Get.snackbar("Exportando", "Arquivo está sendo exportado",backgroundColor: Colors.deepOrange,);
+                  var exportar = Injection.injector.get<ExprotarExcelController>();
+                  exportar.exportarTodosDadosExcel().then((_){
+                    if(_ != null)
+                      Get.snackbar("Sucesso", "Arquivo gerado com sucesso",backgroundColor: Colors.green,);
+                    else 
+                      Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
+                  })
+                  .catchError((_){
+                    Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
+                  });
+                },
+              ),
+              ListTile(
+                title: Text('Importa Base'),
+                onTap: () async {
+                  
+                },
+              ),
+              ListTile(
+                title: Text('Base de dados'),
+                onTap: () async {
+                  Get.snackbar("Exportando", "Arquivo está sendo exportado",backgroundColor: Colors.deepOrange,);
+                  var exportar = Injection.injector.get<ExprotarExcelController>();
+                  exportar.exportarBaseDados().then((_){
+                    if(_ != null)
+                      Get.snackbar("Sucesso", "Arquivo gerado com sucesso",backgroundColor: Colors.green,);
+                    else 
+                      Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
+                  })
+                  .catchError((_){
+                    Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
+                  });
+                },
+              )
+            ],
           ),
           ListTile(
-            leading: Icon(Icons.screen_share),
-            title: Text('Exportar para Excel'),
-            onTap: () async {
-              Get.snackbar("Exportando", "Arquivo está sendo exportado",backgroundColor: Colors.deepOrange,);
-              var exportar = Injection.injector.get<ExprotarExcelController>();
-              exportar.exportarTodosDadosExcel().then((_){
-                if(_ != null)
-                  Get.snackbar("Sucesso", "Arquivo gerado com sucesso",backgroundColor: Colors.green,);
-                else 
-                  Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
-              })
-              .catchError((_){
-                Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
-              });
+            leading: Icon(Icons.assignment_turned_in),
+            title: Text('Termos de Uso'),
+            onTap: () {
+              Get.toNamed(NamesRoutes.termoUso);
             },
           ),
         ],

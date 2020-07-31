@@ -14,8 +14,7 @@ class DataBaseProvider {
   DataBaseProvider.internal();
 
   initDb() async {
-    io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "1-agendamento.db");
+    var path = await obterArquivoSQLite();
     _db = await openDatabase(
       path,
       version: Scripts.migrationScripts.length+1,
@@ -33,6 +32,11 @@ class DataBaseProvider {
         .forEach((script) async => await db.execute(script));
     Scripts.migrationScripts
         .forEach((script) async => await db.execute(script));
+  }
+
+  Future<String> obterArquivoSQLite() async {
+    var documentsDirectory = await getApplicationDocumentsDirectory();
+    return join(documentsDirectory.path, "1-agendamento.db");
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {

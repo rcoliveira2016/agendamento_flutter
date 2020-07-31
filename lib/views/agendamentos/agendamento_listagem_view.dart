@@ -1,5 +1,6 @@
 import 'package:agendamentos/controllers/agendamentos/agendamento_listagem_controller.dart';
 import 'package:agendamentos/models/agendamentos/agendamento_listagem_model.dart';
+import 'package:agendamentos/repositories/aplicativo/termo_uso_repository.dart';
 import 'package:agendamentos/shared/constants/constants.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
@@ -19,6 +20,7 @@ class AgendamentoListagemView extends StatefulWidget {
 
 class _AgendamentoListagemViewState extends State<AgendamentoListagemView> {
   final AgendamentoListagemController _controller = Injection.injector.get();
+  static TermoUsoRepository _termoUsoRepository = Injection.injector.get();
 
   static final fontSizeTextStyleFiltroData = 15.0;
   static final textStyleFiltroData =
@@ -27,7 +29,12 @@ class _AgendamentoListagemViewState extends State<AgendamentoListagemView> {
   @override
   void initState() {
     super.initState();
-    _controller.init();
+    //_termoUsoRepository.resetar().then((_){});
+    _termoUsoRepository.obterStatus().then((status){
+      if(status!=StatusTermoUso.aceito)
+        Get.offAllNamed(NamesRoutes.termoUso,arguments: status==StatusTermoUso.recusado);
+    });
+    _controller.init();    
   }
 
   @override

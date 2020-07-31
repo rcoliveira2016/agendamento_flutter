@@ -13,4 +13,6 @@ class NamesRoutes {
   
   static const exportar = '/exportar/excel';
 
+  static const termoUso = '/exportar/excel';
+
 }

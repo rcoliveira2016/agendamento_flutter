@@ -26,6 +26,7 @@ dependencies:
   permission_handler:
   wc_flutter_share: ^0.2.2
   screenshot: ^0.2.0
+  shared_preferences:
   
 dev_dependencies:
   flutter_test:
