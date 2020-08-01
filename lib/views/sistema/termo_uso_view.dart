@@ -27,9 +27,11 @@ class _TermoUsoViewState extends State<TermoUsoView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBarDefalt(title: "Termos de Uso"),
-        body: widget.termoUsoNaoFoiAceito
-            ? _obterNaoAceitoTermoUso()
-            : _obterTermoUso());
+        body: SingleChildScrollView(
+                  child: widget.termoUsoNaoFoiAceito
+              ? _obterNaoAceitoTermoUso()
+              : _obterTermoUso(),
+        ));
   }
 
   Widget _obterNaoAceitoTermoUso() {

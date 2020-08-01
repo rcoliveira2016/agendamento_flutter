@@ -6,7 +6,7 @@ import 'package:csv/csv.dart';
 
 import 'package:agendamentos/repositories/exportar/excel/exporta_excel_repository.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
-import 'package:downloads_path_provider/downloads_path_provider.dart';
+import 'package:ext_storage/ext_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:agendamentos/shared/extension/date_time_extension.dart';
 
@@ -56,8 +56,9 @@ class ExprotarExcelController {
   }
   
   Future<String> _getPathToDownload() async {
-    var pasta = await DownloadsPathProvider.downloadsDirectory;
-    return pasta.path;
+    var pasta = await ExtStorage.getExternalStoragePublicDirectory(
+        ExtStorage.DIRECTORY_DOWNLOADS);
+    return pasta;
   }
 
   List<List<dynamic>> _obterListaCSV(List<TodosDadosModel> listaTodos) {

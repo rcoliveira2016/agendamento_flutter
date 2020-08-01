@@ -5,6 +5,7 @@ import 'package:agendamentos/controllers/agendamentos/agendamento_listagem_contr
 import 'package:agendamentos/controllers/clientes/cliente_cadastro_controller.dart';
 import 'package:agendamentos/controllers/clientes/cliente_listagem_controller.dart';
 import 'package:agendamentos/controllers/exportar/exporta_excel_controller.dart';
+import 'package:agendamentos/controllers/importar/importar_controller.dart';
 import 'package:agendamentos/repositories/agendamentos/agendamento_listagem_read_repository.dart';
 import 'package:agendamentos/repositories/aplicativo/termo_uso_repository.dart';
 import 'package:agendamentos/repositories/exportar/excel/exporta_excel_repository.dart';
@@ -35,7 +36,7 @@ class Injection {
     injector.map<AgendamentoRepository>((i) => new AgendamentoRepository(), isSingleton: false);
     injector.map<AgendamentoListagemReadRepository>((i) => new AgendamentoListagemReadRepository(), isSingleton: false);
     injector.map<ExportarExcelRepository>((i) => new ExportarExcelRepository(), isSingleton: false);
-
+    injector.map<TermoUsoRepository>((i) => new TermoUsoRepository(), isSingleton: true);
   }  
 
   static void controllerRepositories() {
@@ -46,7 +47,8 @@ class Injection {
     injector.map<AgendamentoCadastroController>((i) => new AgendamentoCadastroController(), isSingleton: false);
 
     injector.map<ExprotarExcelController>((i) => new ExprotarExcelController(), isSingleton: false);
-    injector.map<TermoUsoRepository>((i) => new TermoUsoRepository(), isSingleton: true);
+    injector.map<ImportarController>((i) => new ImportarController(), isSingleton: false);
+    
   }
 
 }

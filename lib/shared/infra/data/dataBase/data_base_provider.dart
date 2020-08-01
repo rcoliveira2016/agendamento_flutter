@@ -1,4 +1,5 @@
-import 'dart:io' as io;
+
+import 'dart:io';
 
 import 'package:agendamentos/shared/infra/data/dataBase/scritps.dart';
 import 'package:path/path.dart';
@@ -17,6 +18,22 @@ class DataBaseProvider {
     var path = await obterArquivoSQLite();
     _db = await openDatabase(
       path,
+      version: Scripts.migrationScripts.length+1,
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+    );
+  }
+
+  Future reloadDb(pathArquivoImportado) async {
+    var arquivoArquivoSQLite = await obterArquivoSQLite();
+    var fileArquivoSQLite = new File(arquivoArquivoSQLite);
+    await fileArquivoSQLite.writeAsBytes([]);
+    await fileArquivoSQLite.writeAsBytes(await new File(pathArquivoImportado).readAsBytes());
+
+    var path = await obterArquivoSQLite();
+    _db = await openDatabase(
+      path,
+      readOnly: true,
       version: Scripts.migrationScripts.length+1,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,

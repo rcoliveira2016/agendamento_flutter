@@ -39,4 +39,5 @@ abstract class RepositoryBase<TEntidade extends Entidade>  {
     return result.toList();
   }
   
+  
 }
