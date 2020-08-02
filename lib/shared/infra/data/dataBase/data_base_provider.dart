@@ -24,9 +24,11 @@ class DataBaseProvider {
     );
   }
 
-  Future reloadDb(pathArquivoImportado) async {
+  Future reloadDb(String pathArquivoImportado) async {
+    if(!pathArquivoImportado.endsWith(".db")) return;
+
     var arquivoArquivoSQLite = await obterArquivoSQLite();
-    var fileArquivoSQLite = new File(arquivoArquivoSQLite);
+    var fileArquivoSQLite = new File(arquivoArquivoSQLite);    
     await fileArquivoSQLite.writeAsBytes([]);
     await fileArquivoSQLite.writeAsBytes(await new File(pathArquivoImportado).readAsBytes());
 

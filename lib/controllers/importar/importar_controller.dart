@@ -8,7 +8,10 @@ class ImportarController {
   final DataBaseProvider _dataBaseProvider = Injection.injector.get();
   
   Future<String> importarDataBase() async {
-    final path = await FilePicker.getFile();// await DocumentsPicker.pickDocuments;
+    final path = await FilePicker.getFile(
+      type: FileType.custom,
+      allowedExtensions: ['db']
+    );// await DocumentsPicker.pickDocuments;
 
      var permissao = await Permission.storage.request();
     if(permissao==PermissionStatus.granted){

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:agendamentos/models/exportar/excel/todos_dados_model.dart';
 import 'package:agendamentos/shared/infra/data/dataBase/data_base_provider.dart';
 import 'package:csv/csv.dart';
-
 import 'package:agendamentos/repositories/exportar/excel/exporta_excel_repository.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:ext_storage/ext_storage.dart';
@@ -23,7 +22,7 @@ class ExprotarExcelController {
 
       var pastaDestino = await _getPathToDownload();
 
-      var caminhoDoArquivo = "$pastaDestino/dados_agendamento-${DateTime.now().formatar("y-M-d-H-m-s")}.csv";
+      var caminhoDoArquivo = "$pastaDestino/dados_agendamento-${DateTime.now().formatar("y-M-d-H-m-s")}.xslx";
       
       var rowsAsListOfValues = const ListToCsvConverter().convert(listaCSV);
 
@@ -32,6 +31,7 @@ class ExprotarExcelController {
       if(await novoArquivo.exists())
         return novoArquivo.path;
       
+
       return null;
     }
   }
