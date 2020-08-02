@@ -7,6 +7,7 @@ class Agendamento extends Entidade {
   double valor;
   int idCliente;
   String observacao;
+  bool ferramentaNova;
 
   int dataNumero;
   Cliente cliente;
@@ -17,7 +18,8 @@ class Agendamento extends Entidade {
     this.quantidade, 
     this.valor, 
     this.idCliente,
-    this.observacao 
+    this.observacao,
+    this.ferramentaNova
   }):super(id:id);
 
   adicionarCliente(Cliente cliente){
@@ -32,6 +34,7 @@ class Agendamento extends Entidade {
     valor = json['valor'];
     idCliente = json['idCliente'];
     observacao = json['observacao'];
+    ferramentaNova = json['ferramentaNova']==null?null:json['ferramentaNova']==1;
   }
 
   Map<String, dynamic> toJson() {
@@ -42,6 +45,7 @@ class Agendamento extends Entidade {
     data['valor'] = this.valor;
     data['idCliente'] = this.idCliente;
     data['observacao'] = this.observacao;
+    data['ferramentaNova'] = this.ferramentaNova?1:0;
     print(this);
     return data;
   }

@@ -16,6 +16,7 @@ abstract class _AgendamentoStoreBase with Store {
     setValor(agendamento.valor);
     setIdCliente(agendamento.idCliente);
     setObservacao(agendamento.observacao);
+    setFerramentaNova(agendamento.ferramentaNova);
   }
 
   _AgendamentoStoreBase.criarNovo(){
@@ -55,4 +56,8 @@ abstract class _AgendamentoStoreBase with Store {
   @action
   void setObservacao(String value) => observacao = value;  
   
+  @observable
+  bool ferramentaNova;
+  @action
+  void setFerramentaNova(bool value) => ferramentaNova = value;
 }

@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
 
 class AgendamentoCadastroView extends StatefulWidget {
@@ -160,6 +161,41 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
                               initialValue: _controller.valorCalculado,
                               onSaved: _controller.agendamentoAtual.setValor,
                             );
+                          }),
+                          SizedBox(height: 15),
+                          Observer(builder: (_) {
+                            return 
+                              Container(
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      "Status da ferradura",
+                                      style: TextStyle(
+                                          color: Theme.of(context).hintColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 17.5),
+                                    ),
+                                    SizedBox(height: 5),
+                                    ToggleSwitch(
+                                      minWidth: 100.0,
+                                      minHeight: 40.0,
+                                      fontSize: 16.0,
+                                      initialLabelIndex: _controller.indexFerramentaNova,
+                                      activeBgColor: Colors.redAccent,
+                                      activeFgColor: Colors.white,
+                                      inactiveBgColor: Colors.blueGrey[50],
+                                      inactiveFgColor: Theme.of(context).hintColor,
+                                      labels: ['Nova', 'Regranpada'],
+                                      onToggle: (index) {
+                                        _controller.agendamentoAtual.setFerramentaNova(index==0);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              );
                           }),
                         ],
                       ),

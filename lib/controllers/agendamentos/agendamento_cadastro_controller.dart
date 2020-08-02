@@ -46,6 +46,12 @@ abstract class _AgendamentoCadastroController with Store {
       return agendamentoAtual.cliente==null?"":agendamentoAtual.cliente.localPadrao;
     }
 
+    @computed
+    int get indexFerramentaNova {
+      if(agendamentoAtual.ferramentaNova==null) return -1;
+      return agendamentoAtual.ferramentaNova?0:1;
+    }
+
     @action
     setarCliente(int id) async {
       var cliente = itemsClientes.firstWhere((x)=> x.id == id);
@@ -53,7 +59,7 @@ abstract class _AgendamentoCadastroController with Store {
       agendamentoAtual.setIdCliente(id);
 
       _agendamentoListagemReadRepository.buscarProximoAgendamento(id).then((proximaData){
-        if(proximaData!=null)
+        if(proximaData!=null && (agendamentoAtual.id==null||agendamentoAtual.id<=0))
           agendamentoAtual.setData(proximaData);
       });      
     }  
@@ -83,7 +89,8 @@ abstract class _AgendamentoCadastroController with Store {
         idCliente: agendamentoAtual.idCliente,
         quantidade: agendamentoAtual.quantidade,
         valor: agendamentoAtual.valor,
-        observacao: agendamentoAtual.observacao
+        observacao: agendamentoAtual.observacao,
+        ferramentaNova: agendamentoAtual.ferramentaNova
       );
       if(salvaModelo.isNew)
         await _agendamentoRepository.add(salvaModelo);

@@ -25,6 +25,7 @@ class Scripts {
   ];
 
   static final List<String> migrationScripts = [
-    '''ALTER TABLE agendamento ADD COLUMN observacao Text;'''
+    '''ALTER TABLE agendamento ADD COLUMN observacao Text;''',
+    '''ALTER TABLE agendamento ADD COLUMN ferramentaNova integer;''',
   ];
 }
