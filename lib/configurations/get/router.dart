@@ -7,6 +7,7 @@ import 'package:agendamentos/views/Cliente/cliente_listagem_view.dart';
 import 'package:agendamentos/views/agendamentos/agendamento_cadastro_view.dart';
 import 'package:agendamentos/views/agendamentos/agendamento_listagem_view.dart';
 import 'package:agendamentos/views/sistema/termo_uso_view.dart';
+import 'package:agendamentos/views/sistema/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +19,7 @@ class Router {
     switch (settings.name) {
       case '/':
         return GetRoute(
-          page: AgendamentoListagemView(),
+          page: SplashView(),
           settings: settings,
         );
 
