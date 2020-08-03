@@ -61,7 +61,7 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
               icon: Icon(Icons.share),
               onPressed: () async {
                 if (!clienteExiste()) return;
-                
+
                 var imagem = await screenshotController.captureAsUiImage();
                 var bytes =
                     await imagem.toByteData(format: ImageByteFormat.png);
@@ -228,6 +228,139 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
                         )
                       : SizedBox();
                 }),
+                Observer(builder: (_) {
+                  return clienteExiste()
+                      ? Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  width: 230,
+                                  child: _controller
+                                              .itemsDeAgendamentos.length <
+                                          1
+                                      ? RaisedButton(
+                                          color: Colors.red,
+                                          textColor: Colors.white,
+                                          onPressed: () {
+                                            _controller.mostarAgendamentos();
+                                          },
+                                          child: Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                  Icons.supervised_user_circle),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text("mostar agendamentos"),
+                                            ],
+                                          ),
+                                        )
+                                      : SizedBox(),
+                                ),
+                                _controller.itemsDeAgendamentos.length > 0
+                                    ? Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          SizedBox(height: 5),
+                                          Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.supervised_user_circle,
+                                                size: 30,
+                                              ),
+                                              SizedBox(width: 5),
+                                              Text("Ultimos 10 agendamentos",
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold)),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10),
+                                          Divider(
+                                            color: Colors.black,
+                                          ),
+                                          Container(
+                                            constraints: BoxConstraints(
+                                              maxHeight: 355,
+                                            ),
+                                            child: ListView.builder(
+                                                itemCount: _controller
+                                                    .itemsDeAgendamentos.length,
+                                                itemBuilder: (_, int index) {
+                                                  var agendamento = _controller
+                                                          .itemsDeAgendamentos[
+                                                      index];
+                                                  return Column(
+                                                    children: <Widget>[
+                                                      ListTile(
+                                                        leading: Icon(
+                                                          Icons.toc,
+                                                          size: 50,
+                                                          color: Colors.black,
+                                                        ),
+                                                        onTap: () {
+                                                          Get.toNamed(
+                                                              NamesRoutes
+                                                                  .agendamentoAtualizar,
+                                                              arguments:
+                                                                  agendamento
+                                                                      .id);
+                                                        },
+                                                        title: Row(
+                                                          children: <Widget>[
+                                                            Text("Data: ",
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold)),
+                                                            Text(
+                                                                "${agendamento.data.formatar(DateFormat.YEAR_MONTH_DAY)}"),
+                                                          ],
+                                                        ),
+                                                        subtitle: Row(
+                                                          children: <Widget>[
+                                                            Text("Observação: ",
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold)),
+                                                            Flexible(
+                                                              child: Text(
+                                                                  "${agendamento.observacao}"),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Divider(
+                                                        color: Colors.grey,
+                                                      )
+                                                    ],
+                                                  );
+                                                }),
+                                          ),
+                                        ],
+                                      )
+                                    : SizedBox(
+                                        height: 1,
+                                      )
+                              ],
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          height: 1,
+                        );
+                }),
                 SizedBox(
                   height: 75,
                 )
@@ -254,7 +387,6 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
           }
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

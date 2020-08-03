@@ -9,4 +9,16 @@ class AgendamentoRepository extends RepositoryBase<Agendamento>{
   @override
   Agendamento map(Map<String, dynamic> json) => Agendamento.fromJson(json);
 
+  Future<List<Agendamento>> buscarPorIdCliente(int idCliente){
+    return getAll('''
+      select 
+        *
+      from
+        $nameTable
+      where idCliente = ?
+      order by dataNumero
+      limit 10
+    ''',[idCliente]);
+  }
+
 }

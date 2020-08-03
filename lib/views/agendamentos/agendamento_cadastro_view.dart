@@ -188,7 +188,7 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
                                       activeFgColor: Colors.white,
                                       inactiveBgColor: Colors.blueGrey[50],
                                       inactiveFgColor: Theme.of(context).hintColor,
-                                      labels: ['Nova', 'Regranpada'],
+                                      labels: ['Nova', 'Repregado'],
                                       onToggle: (index) {
                                         _controller.agendamentoAtual.setFerramentaNova(index==0);
                                       },

@@ -1,5 +1,7 @@
+import 'package:agendamentos/models/agendamentos/agendamento_model.dart';
 import 'package:agendamentos/models/clientes/cliente_model.dart';
 import 'package:agendamentos/repositories/agendamentos/agendamento_listagem_read_repository.dart';
+import 'package:agendamentos/repositories/agendamentos/agendamento_repository.dart';
 import 'package:agendamentos/repositories/clientes/cliente_repository.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:mobx/mobx.dart';
@@ -10,12 +12,19 @@ class ClienteCadastroController = _ClienteCadastroController with _$ClienteCadas
 abstract class _ClienteCadastroController with Store {
     final ClienteRepository _clienteRepository = Injection.injector.get();
     final AgendamentoListagemReadRepository _agendamentoListagemReadRepository = Injection.injector.get();
+    final AgendamentoRepository _agendamentoRepository = Injection.injector.get();
+
     @observable
     Cliente clienteAtual;
     @observable
     DateTime ultimoAgendamento;
-     @observable
+    @observable
     DateTime proximoAgendamento;
+    @observable
+    bool mostrarAgendamrntos;
+    @observable
+    ObservableList<Agendamento> itemsDeAgendamentos =
+      <Agendamento>[].asObservable();
 
     @action
     buscarCliente(int id) async {
@@ -26,12 +35,20 @@ abstract class _ClienteCadastroController with Store {
         await buscarDatas();
     }
 
+    @action
+    mostarAgendamentos() async {
+      itemsDeAgendamentos.clear();
+      itemsDeAgendamentos.addAll(await _agendamentoRepository.buscarPorIdCliente(clienteAtual.id));
+      mostrarAgendamrntos = true;
+    }
+
     Future buscarDatas() async {
       if(clienteAtual.isNew) return;
 
       ultimoAgendamento = await _agendamentoListagemReadRepository.buscarUltimoAgendamento(clienteAtual.id);
       proximoAgendamento = await _agendamentoListagemReadRepository.buscarProximoAgendamento(clienteAtual.id);
     }
+
 
     String validarTexto(String texto){
       if (texto == null || texto.isEmpty)
