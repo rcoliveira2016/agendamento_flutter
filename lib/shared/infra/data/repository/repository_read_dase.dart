@@ -1,4 +1,3 @@
-import 'package:agendamentos/shared/Models/entidade.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:agendamentos/shared/infra/data/dataBase/data_base_provider.dart';
 

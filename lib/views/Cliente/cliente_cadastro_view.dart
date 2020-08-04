@@ -17,7 +17,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
 
 class ClienteCadastroView extends StatefulWidget {
-  int id;
+  final int id;
   ClienteCadastroView({this.id});
   @override
   _ClienteCadastroStateView createState() => _ClienteCadastroStateView();
@@ -242,8 +242,7 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
                                 SizedBox(
                                   width: 230,
                                   child: _controller
-                                              .itemsDeAgendamentos.length <
-                                          1
+                                            .itemsDeAgendamentos.length < 1
                                       ? RaisedButton(
                                           color: Colors.red,
                                           textColor: Colors.white,
@@ -278,7 +277,7 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
                                                 size: 30,
                                               ),
                                               SizedBox(width: 5),
-                                              Text("Ultimos 10 agendamentos",
+                                              Text("Ultimos ${_controller.itemsDeAgendamentos.length} agendamentos",
                                                   style: TextStyle(
                                                       fontSize: 18,
                                                       fontWeight:
@@ -293,60 +292,69 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
                                             constraints: BoxConstraints(
                                               maxHeight: 355,
                                             ),
-                                            child: ListView.builder(
-                                                itemCount: _controller
-                                                    .itemsDeAgendamentos.length,
-                                                itemBuilder: (_, int index) {
-                                                  var agendamento = _controller
-                                                          .itemsDeAgendamentos[
-                                                      index];
-                                                  return Column(
-                                                    children: <Widget>[
-                                                      ListTile(
-                                                        leading: Icon(
-                                                          Icons.toc,
-                                                          size: 50,
-                                                          color: Colors.black,
+                                            child: NotificationListener<ScrollNotification>(
+                                              onNotification: (ScrollNotification scrollInfo){
+                                                if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+                                                  _controller.carregarProximosAgendamentos();
+                                                }
+                                                return true;
+                                              },
+                                              child: ListView.builder(
+                                                  itemCount: _controller
+                                                      .itemsDeAgendamentos.length,
+                                                  itemBuilder: (_, int index) {
+                                                    var agendamento = _controller
+                                                            .itemsDeAgendamentos[index];
+                                                    return Column(
+                                                      children: <Widget>[
+                                                        ListTile(
+                                                          leading: Icon(
+                                                            Icons.toc,
+                                                            size: 50,
+                                                            color: Colors.black,
+                                                          ),
+                                                          onTap: () {
+                                                            Get.toNamed(
+                                                                NamesRoutes
+                                                                    .agendamentoAtualizar,
+                                                                arguments:
+                                                                    agendamento.id);
+                                                          },
+                                                          title: Row(
+                                                            children: <Widget>[
+                                                              Text("Data: ",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold)),
+                                                              Text(
+                                                                  "${agendamento.data.formatar(DateFormat.YEAR_MONTH_DAY)}"),
+                                                            ],
+                                                          ),
+                                                          subtitle: Row(
+                                                            children: <Widget>[
+                                                              Text("Observação: ",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                          ),
+                                                              ),
+                                                              Flexible(
+                                                                child: Text(
+                                                                    "${agendamento.observacao}",
+                                                                    ),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
-                                                        onTap: () {
-                                                          Get.toNamed(
-                                                              NamesRoutes
-                                                                  .agendamentoAtualizar,
-                                                              arguments:
-                                                                  agendamento
-                                                                      .id);
-                                                        },
-                                                        title: Row(
-                                                          children: <Widget>[
-                                                            Text("Data: ",
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold)),
-                                                            Text(
-                                                                "${agendamento.data.formatar(DateFormat.YEAR_MONTH_DAY)}"),
-                                                          ],
-                                                        ),
-                                                        subtitle: Row(
-                                                          children: <Widget>[
-                                                            Text("Observação: ",
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold)),
-                                                            Flexible(
-                                                              child: Text(
-                                                                  "${agendamento.observacao}"),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Divider(
-                                                        color: Colors.grey,
-                                                      )
-                                                    ],
-                                                  );
-                                                }),
+                                                        Divider(
+                                                          color: Colors.grey,
+                                                        )
+                                                      ],
+                                                    );
+                                                  }),
+                                            ),
                                           ),
                                         ],
                                       )

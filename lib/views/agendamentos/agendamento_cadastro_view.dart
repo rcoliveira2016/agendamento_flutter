@@ -18,8 +18,8 @@ import 'package:toggle_switch/toggle_switch.dart';
 import 'package:wc_flutter_share/wc_flutter_share.dart';
 
 class AgendamentoCadastroView extends StatefulWidget {
-  int id;
-  int idCliente;
+  final int id;
+  final int idCliente;
   AgendamentoCadastroView({this.id, this.idCliente});
   @override
   _AgendamentoCadastroStateView createState() =>

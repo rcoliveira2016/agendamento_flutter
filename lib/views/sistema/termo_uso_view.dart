@@ -28,9 +28,12 @@ class _TermoUsoViewState extends State<TermoUsoView> {
     return Scaffold(
         appBar: AppBarDefalt(title: "Termos de Uso"),
         body: SingleChildScrollView(
-                  child: widget.termoUsoNaoFoiAceito
-              ? _obterNaoAceitoTermoUso()
-              : _obterTermoUso(),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: widget.termoUsoNaoFoiAceito
+                ? _obterNaoAceitoTermoUso()
+                : _obterTermoUso(),
+          ),
         ));
   }
 
@@ -64,11 +67,8 @@ class _TermoUsoViewState extends State<TermoUsoView> {
             children: _termoUsoRepository
                 .obterTexto()
                 .map((texto) => Column(
-                  children: <Widget>[
-                    Text(texto),
-                    SizedBox(height: 5)
-                  ],
-                ))
+                      children: <Widget>[Text(texto), SizedBox(height: 5)],
+                    ))
                 .toList(),
           ),
           SizedBox(height: 20),

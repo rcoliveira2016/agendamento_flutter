@@ -17,7 +17,9 @@ class _SplashViewState extends State<SplashView> {
     super.initState();
     _termoUsoRepository.obterStatus().then((status){
       if(status!=StatusTermoUso.aceito)
-        Get.offAllNamed(NamesRoutes.termoUso,arguments: status==StatusTermoUso.recusado);
+         Future.delayed(Duration(milliseconds: 300)).then((_){
+          Get.offAllNamed(NamesRoutes.termoUso,arguments: status==StatusTermoUso.recusado);
+        });        
       
       if(status == StatusTermoUso.aceito)
         Future.delayed(Duration(milliseconds: 300)).then((_){

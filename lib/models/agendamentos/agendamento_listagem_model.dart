@@ -1,4 +1,3 @@
-import 'package:agendamentos/shared/Models/entidade.dart';
 
 class AgendamentoListagemModel {
   int id;

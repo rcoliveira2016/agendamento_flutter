@@ -13,15 +13,15 @@ abstract class _ClienteCadastroController with Store {
     final ClienteRepository _clienteRepository = Injection.injector.get();
     final AgendamentoListagemReadRepository _agendamentoListagemReadRepository = Injection.injector.get();
     final AgendamentoRepository _agendamentoRepository = Injection.injector.get();
-
+    var _inicioPaginacaoAgendamentos = 0;
+    var _limitePaginacaoAgendamentos = 5;
+    
     @observable
     Cliente clienteAtual;
     @observable
     DateTime ultimoAgendamento;
     @observable
     DateTime proximoAgendamento;
-    @observable
-    bool mostrarAgendamrntos;
     @observable
     ObservableList<Agendamento> itemsDeAgendamentos =
       <Agendamento>[].asObservable();
@@ -39,7 +39,19 @@ abstract class _ClienteCadastroController with Store {
     mostarAgendamentos() async {
       itemsDeAgendamentos.clear();
       itemsDeAgendamentos.addAll(await _agendamentoRepository.buscarPorIdCliente(clienteAtual.id));
-      mostrarAgendamrntos = true;
+    }
+
+    @action
+    carregarProximosAgendamentos() async {
+      await new Future.delayed(new Duration(milliseconds: 800));
+      _inicioPaginacaoAgendamentos+=_limitePaginacaoAgendamentos;
+      itemsDeAgendamentos.addAll(
+        await _agendamentoRepository.buscarPorIdCliente(
+          clienteAtual.id,
+          contidade: _limitePaginacaoAgendamentos,
+          inicio: _inicioPaginacaoAgendamentos
+        )
+      );
     }
 
     Future buscarDatas() async {

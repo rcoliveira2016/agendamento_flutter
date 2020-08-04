@@ -1,7 +1,4 @@
-import 'package:agendamentos/controllers/agendamentos/agendamento_listagem_controller.dart';
-import 'package:agendamentos/repositories/aplicativo/termo_uso_repository.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
-import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:agendamentos/views/Cliente/cliente_cadastro_view.dart';
 import 'package:agendamentos/views/Cliente/cliente_listagem_view.dart';
 import 'package:agendamentos/views/agendamentos/agendamento_cadastro_view.dart';

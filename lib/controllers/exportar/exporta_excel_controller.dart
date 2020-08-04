@@ -34,6 +34,7 @@ class ExprotarExcelController {
 
       return null;
     }
+    return null;
   }
 
   Future<String> exportarBaseDados() async {
@@ -53,6 +54,7 @@ class ExprotarExcelController {
       
       return null;
     }
+    return null;
   }
   
   Future<String> _getPathToDownload() async {

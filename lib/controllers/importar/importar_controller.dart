@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:agendamentos/shared/infra/data/dataBase/data_base_provider.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:file_picker/file_picker.dart';
@@ -18,6 +17,7 @@ class ImportarController {
       await _dataBaseProvider.reloadDb(path.path);
       return "";
     }
+    return null;
   }
 
 }

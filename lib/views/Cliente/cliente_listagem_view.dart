@@ -1,6 +1,5 @@
 import 'package:agendamentos/controllers/clientes/cliente_listagem_controller.dart';
 import 'package:agendamentos/models/clientes/cliente_model.dart';
-import 'package:agendamentos/shared/constants/constants.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:agendamentos/widgets/scaffold/app_bar_defalt.dart';

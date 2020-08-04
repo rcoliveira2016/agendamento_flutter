@@ -6,11 +6,6 @@ class TermoUsoRepository {
   final dataUltimaVersaoTermo = DateTime(2020, 7, 30, 15);
   StatusTermoUso _status;
 
-  TermoUsoRepository(){
-    var t = true;
-
-  }
-
   Future<StatusTermoUso> obterStatus() async {
     if(_status!=null) return _status;
 
