@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:agendamentos/controllers/agendamentos/agendamento_cadastro_controller.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
+import 'package:agendamentos/shared/helper/get_helper.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:agendamentos/widgets/date_picker/date_picker_buttom.dart';
 import 'package:agendamentos/widgets/forms/agendamento_form_field/dinheiro_agendamento_form_field.dart';
@@ -234,22 +235,13 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
             : IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
-                  Get.defaultDialog(
-                    title: "Agendamento",
-                    content: Container(
-                      child: Text("Deseja excluir o agendamento."),
-                    ),
-                    cancel: FlatButton(
-                      child: Text("Não"),
-                      onPressed: () => Get.back(),
-                    ),
-                    confirm: FlatButton(
-                      child: Text("Sim"),
-                      onPressed: () {
-                        _controller.deletar(_controller.agendamentoAtual.id);
-                        Get.offNamed(NamesRoutes.agendamento);
-                      },
-                    ),
+                  GetHelper.excluirDialogo(
+                    titulo: "Excluir Agendamento",
+                    mesagem: "Deseja excluir o agendamento..",
+                    onConfirmacao: () {
+                      _controller.deletar(_controller.agendamentoAtual.id);
+                      Get.offNamed(NamesRoutes.agendamento);
+                    },
                   );
                 },
               );

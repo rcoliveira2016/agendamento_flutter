@@ -8,6 +8,10 @@ class AgendamentoRepository extends RepositoryBase<Agendamento>{
   @override
   Agendamento map(Map<String, dynamic> json) => Agendamento.fromJson(json);
 
+  deletePorCliente(idCliente) async{
+    await deleteWhere("idCliente = ?",[idCliente]);
+  }
+
   Future<List<Agendamento>> buscarPorIdCliente(int idCliente,{int inicio=0, int contidade = 10}){
     return getAll('''
       select 

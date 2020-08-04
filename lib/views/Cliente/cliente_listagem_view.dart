@@ -1,6 +1,7 @@
 import 'package:agendamentos/controllers/clientes/cliente_listagem_controller.dart';
 import 'package:agendamentos/models/clientes/cliente_model.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
+import 'package:agendamentos/shared/helper/get_helper.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:agendamentos/widgets/scaffold/app_bar_defalt.dart';
 import 'package:agendamentos/widgets/scaffold/drawer_defat.dart';
@@ -67,40 +68,18 @@ class _ClienteListagemViewState extends State<ClienteListagemView> {
                               arguments: item.id);
                         },
                         onLongPress: () {
-                          Get.defaultDialog(
-                            title: "Cliente",
-                            content: Container(
-                              child: Text(
-                                  "Deseja excluir o cliente ${item.nome}."),
-                            ),
-                            cancel: FlatButton(
-                              child: Text("Não"),
-                              onPressed: () => Get.back(),
-                            ),
-                            confirm: FlatButton(
-                              child: Text("Sim"),
-                              onPressed: () {
+                          GetHelper.excluirDialogo(
+                            titulo: "Excluir cliente",
+                            mesagem: "Deseja excluir o cliente ${item.nome} (Também será excluido os agendamentos do mesmo).",
+                            onConfirmacao: () {
                                 _clienteListagemController
                                     .deletar(item.id)
                                     .then((_) {
-                                      Get.snackbar(
-                                        "Sucesso",
-                                        "Cliente ${item.nome} excluido com sucesso",
-                                        margin: EdgeInsets.all(5),
-                                        backgroundColor: Colors.green,
-                                      );
+                                      GetHelper.snackbarSucesso(mesagem:"Cliente ${item.nome} excluído com sucesso");
                                       setState(() {});
                                       Get.back();
-                                    }).catchError(() {
-                                      Get.snackbar(
-                                        "Erro",
-                                        "Cliente ${item.nome} excluido ocorreu",
-                                        margin: EdgeInsets.all(5),
-                                        backgroundColor: Colors.green,
-                                      );
-                                    });
+                                    }).catchError(()=>GetHelper.snackbarErro(mesagem: "Cliente ${item.nome} excluido ocorreu"));
                               },
-                            ),
                           );
                         },
                         leading: Icon(Icons.perm_identity, size: 35),

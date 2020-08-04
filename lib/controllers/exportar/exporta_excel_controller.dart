@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:agendamentos/models/exportar/excel/todos_dados_model.dart';
+import 'package:agendamentos/shared/Models/notificacao_model.dart';
 import 'package:agendamentos/shared/infra/data/dataBase/data_base_provider.dart';
 import 'package:csv/csv.dart';
 import 'package:agendamentos/repositories/exportar/excel/exporta_excel_repository.dart';
@@ -13,7 +14,7 @@ class ExprotarExcelController {
   final ExportarExcelRepository _exportarExcelRepository = Injection.injector.get();
   final DataBaseProvider _dataBaseProvider = Injection.injector.get();
 
-  Future<String> exportarTodosDadosExcel() async {
+  Future<NotificacaoModel> exportarTodosDadosExcel() async {
     var permissao = await Permission.storage.request();
     if(permissao==PermissionStatus.granted){
 
@@ -29,15 +30,15 @@ class ExprotarExcelController {
       var criarArquivo = await new File(caminhoDoArquivo).create(recursive: true);
       var novoArquivo = await (criarArquivo.writeAsString(rowsAsListOfValues));
       if(await novoArquivo.exists())
-        return novoArquivo.path;
+        return NotificacaoModel.sucesso("Arquivo gerado com sucesso");
       
 
-      return null;
+      return NotificacaoModel.erro("Falha na geração");
     }
-    return null;
+    return NotificacaoModel.erro("Não foi concedido");
   }
 
-  Future<String> exportarBaseDados() async {
+  Future<NotificacaoModel> exportarBaseDados() async {
     var permissao = await Permission.storage.request();
     if(permissao==PermissionStatus.granted){
 
@@ -50,11 +51,12 @@ class ExprotarExcelController {
       var novoArquivo = await new File(arquivoArquivoSQLite).copy(caminhoDoArquivo);
 
       if(await novoArquivo.exists())
-        return novoArquivo.path;
+        return NotificacaoModel.sucesso("Arquivo gerado com sucesso");
       
-      return null;
+
+      return NotificacaoModel.erro("Falha na geração");
     }
-    return null;
+    return NotificacaoModel.erro("Não foi concedido permissão");
   }
   
   Future<String> _getPathToDownload() async {

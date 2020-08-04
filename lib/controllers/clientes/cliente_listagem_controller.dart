@@ -1,9 +1,12 @@
 import 'package:agendamentos/models/clientes/cliente_model.dart';
+import 'package:agendamentos/repositories/agendamentos/agendamento_repository.dart';
 import 'package:agendamentos/repositories/clientes/cliente_repository.dart';
+import 'package:agendamentos/shared/Models/notificacao_model.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 
 class ClienteListagemController {
   final ClienteRepository _clienteRepository = Injection.injector.get();
+  final AgendamentoRepository _agendamentoRepository = Injection.injector.get();
 
   String filtro="";
 
@@ -15,8 +18,9 @@ class ClienteListagemController {
     return _clienteRepository.buscarClientes(filtro);
   }
 
-  Future deletar(int id) async {
+  Future<NotificacaoModel> deletar(int id) async {    
     await _clienteRepository.delete(id);
+    await _agendamentoRepository.deletePorCliente(id);
   }
 
 }

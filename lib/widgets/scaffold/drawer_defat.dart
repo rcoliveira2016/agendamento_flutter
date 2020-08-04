@@ -1,6 +1,7 @@
 import 'package:agendamentos/controllers/exportar/exporta_excel_controller.dart';
 import 'package:agendamentos/controllers/importar/importar_controller.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
+import 'package:agendamentos/shared/helper/get_helper.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -63,15 +64,9 @@ class DrawerDefalt extends StatelessWidget {
                 onTap: () async {
                   Get.snackbar("Exportando", "Arquivo está sendo exportado",backgroundColor: Colors.deepOrange,);
                   var exportar = Injection.injector.get<ExprotarExcelController>();
-                  exportar.exportarTodosDadosExcel().then((_){
-                    if(_ != null)
-                      Get.snackbar("Sucesso", "Arquivo gerado com sucesso",backgroundColor: Colors.green,);
-                    else 
-                      Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
-                  })
-                  .catchError((_){
-                    Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
-                  });
+                  exportar.exportarTodosDadosExcel()
+                    .then((x)=> GetHelper.snackbarRespostaAcao(x))
+                    .catchError((x)=> GetHelper.snackbarErro(mesagem: x.toString()));
                 },
               ),              
               ListTile(
@@ -79,15 +74,9 @@ class DrawerDefalt extends StatelessWidget {
                 onTap: () async {
                   Get.snackbar("Exportando", "Arquivo está sendo exportado",backgroundColor: Colors.deepOrange,);
                   var exportar = Injection.injector.get<ExprotarExcelController>();
-                  exportar.exportarBaseDados().then((_){
-                    if(_ != null)
-                      Get.snackbar("Sucesso", "Arquivo gerado com sucesso",backgroundColor: Colors.green,);
-                    else 
-                      Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
-                  })
-                  .catchError((_){
-                    Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
-                  });
+                  exportar.exportarBaseDados()
+                    .then((x)=> GetHelper.snackbarRespostaAcao(x))
+                    .catchError((x)=> GetHelper.snackbarErro(mesagem: x.toString()));
                 },
               )
             ],
@@ -97,17 +86,9 @@ class DrawerDefalt extends StatelessWidget {
             leading: Icon(Icons.arrow_upward),
             onTap: () async {
               var importar = Injection.injector.get<ImportarController>();
-              importar.importarDataBase().then((_){
-                    if(_ != null){
-                      Get.snackbar("Sucesso", "Arquivo gerado com sucesso",backgroundColor: Colors.green,);
-                      Get.reset();
-                    }
-                    else 
-                      Get.snackbar("Error", "Falha na geração",backgroundColor: Colors.red,);
-                  })
-                  .catchError((_){
-                    Get.snackbar("Error", "Falha na geração ${_.toString()}",backgroundColor: Colors.red,);
-                  });
+              importar.importarDataBase()
+                .then((x)=> GetHelper.snackbarRespostaAcao(x))
+                .catchError((x)=> GetHelper.snackbarErro(mesagem: x.toString()));
             },
           ),
           ListTile(

@@ -14,6 +14,10 @@ abstract class RepositoryBase<TEntidade extends Entidade>  {
     await _dataBaseProvider.db.delete(nameTable, where: "id = ?", whereArgs: [id]);
   }
 
+  Future deleteWhere(String where, List<dynamic> whereArgs) async{
+    await _dataBaseProvider.db.delete(nameTable, where: where, whereArgs: whereArgs);
+  }
+
   Future updade(int id, Entidade entidade) async{
     await _dataBaseProvider.db.update(nameTable, entidade.toJson(), where: "id = ?", whereArgs: [id]);
   }
