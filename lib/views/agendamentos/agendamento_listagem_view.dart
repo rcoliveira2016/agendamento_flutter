@@ -2,6 +2,7 @@ import 'package:agendamentos/controllers/agendamentos/agendamento_listagem_contr
 import 'package:agendamentos/models/agendamentos/agendamento_listagem_model.dart';
 import 'package:agendamentos/shared/constants/constants.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
+import 'package:agendamentos/shared/helper/get_helper.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:agendamentos/widgets/scaffold/app_bar_defalt.dart';
 import 'package:agendamentos/widgets/scaffold/drawer_defat.dart';
@@ -154,8 +155,10 @@ class _AgendamentoListagemViewState extends State<AgendamentoListagemView> {
                                 confirm: FlatButton(
                                   child: Text("Sim"),
                                   onPressed: () {
-                                    _controller.cadastro(item);
-                                    Get.back();
+                                    _controller.cadastro(item)
+                                      .then((value) =>  Get.back())
+                                      .catchError(()=> GetHelper.snackbarErro(mesagem: "Ocrreu um erro"));
+                                   
                                   },
                                 ),
                               );

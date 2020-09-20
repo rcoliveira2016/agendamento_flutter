@@ -6,7 +6,7 @@ part of 'agendamento_listagem_controller.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AgendamentoListagemController
     on _AgendamentoListagemControllerBase, Store {
@@ -15,17 +15,15 @@ mixin _$AgendamentoListagemController
 
   @override
   DateTime get dataInicioSemana {
-    _$dataInicioSemanaAtom.context.enforceReadPolicy(_$dataInicioSemanaAtom);
-    _$dataInicioSemanaAtom.reportObserved();
+    _$dataInicioSemanaAtom.reportRead();
     return super.dataInicioSemana;
   }
 
   @override
   set dataInicioSemana(DateTime value) {
-    _$dataInicioSemanaAtom.context.conditionallyRunInAction(() {
+    _$dataInicioSemanaAtom.reportWrite(value, super.dataInicioSemana, () {
       super.dataInicioSemana = value;
-      _$dataInicioSemanaAtom.reportChanged();
-    }, _$dataInicioSemanaAtom, name: '${_$dataInicioSemanaAtom.name}_set');
+    });
   }
 
   final _$dataFinalSemanaAtom =
@@ -33,58 +31,58 @@ mixin _$AgendamentoListagemController
 
   @override
   DateTime get dataFinalSemana {
-    _$dataFinalSemanaAtom.context.enforceReadPolicy(_$dataFinalSemanaAtom);
-    _$dataFinalSemanaAtom.reportObserved();
+    _$dataFinalSemanaAtom.reportRead();
     return super.dataFinalSemana;
   }
 
   @override
   set dataFinalSemana(DateTime value) {
-    _$dataFinalSemanaAtom.context.conditionallyRunInAction(() {
+    _$dataFinalSemanaAtom.reportWrite(value, super.dataFinalSemana, () {
       super.dataFinalSemana = value;
-      _$dataFinalSemanaAtom.reportChanged();
-    }, _$dataFinalSemanaAtom, name: '${_$dataFinalSemanaAtom.name}_set');
+    });
   }
 
   final _$itemsAtom = Atom(name: '_AgendamentoListagemControllerBase.items');
 
   @override
   ObservableList<AgendamentoListagemModel> get items {
-    _$itemsAtom.context.enforceReadPolicy(_$itemsAtom);
-    _$itemsAtom.reportObserved();
+    _$itemsAtom.reportRead();
     return super.items;
   }
 
   @override
   set items(ObservableList<AgendamentoListagemModel> value) {
-    _$itemsAtom.context.conditionallyRunInAction(() {
+    _$itemsAtom.reportWrite(value, super.items, () {
       super.items = value;
-      _$itemsAtom.reportChanged();
-    }, _$itemsAtom, name: '${_$itemsAtom.name}_set');
+    });
   }
 
-  final _$initAsyncAction = AsyncAction('init');
+  final _$initAsyncAction =
+      AsyncAction('_AgendamentoListagemControllerBase.init');
 
   @override
   Future init() {
     return _$initAsyncAction.run(() => super.init());
   }
 
-  final _$filtroDataAsyncAction = AsyncAction('filtroData');
+  final _$filtroDataAsyncAction =
+      AsyncAction('_AgendamentoListagemControllerBase.filtroData');
 
   @override
   Future filtroData(DateTime dataDiaSemana) {
     return _$filtroDataAsyncAction.run(() => super.filtroData(dataDiaSemana));
   }
 
-  final _$cadastroAsyncAction = AsyncAction('cadastro');
+  final _$cadastroAsyncAction =
+      AsyncAction('_AgendamentoListagemControllerBase.cadastro');
 
   @override
   Future cadastro(AgendamentoListagemModel model) {
     return _$cadastroAsyncAction.run(() => super.cadastro(model));
   }
 
-  final _$deletarAsyncAction = AsyncAction('deletar');
+  final _$deletarAsyncAction =
+      AsyncAction('_AgendamentoListagemControllerBase.deletar');
 
   @override
   Future deletar(int id) {
@@ -93,8 +91,10 @@ mixin _$AgendamentoListagemController
 
   @override
   String toString() {
-    final string =
-        'dataInicioSemana: ${dataInicioSemana.toString()},dataFinalSemana: ${dataFinalSemana.toString()},items: ${items.toString()}';
-    return '{$string}';
+    return '''
+dataInicioSemana: ${dataInicioSemana},
+dataFinalSemana: ${dataFinalSemana},
+items: ${items}
+    ''';
   }
 }

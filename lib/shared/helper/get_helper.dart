@@ -26,7 +26,7 @@ class GetHelper {
   {
     assert(resposta!=null || mesagem!=null);
 
-    Get.snackbar(_tituloErro, resposta?.mensagem??mesagem, backgroundColor: Colors.green,);
+    Get.snackbar(_tituloErro, resposta?.mensagem??mesagem, backgroundColor: Colors.red,);
   }
 
   static snackbarAlerta({NotificacaoModel resposta, mesagem})

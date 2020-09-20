@@ -6,7 +6,7 @@ part of 'cliente_cadastro_controller.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ClienteCadastroController on _ClienteCadastroController, Store {
   final _$clienteAtualAtom =
@@ -14,17 +14,15 @@ mixin _$ClienteCadastroController on _ClienteCadastroController, Store {
 
   @override
   Cliente get clienteAtual {
-    _$clienteAtualAtom.context.enforceReadPolicy(_$clienteAtualAtom);
-    _$clienteAtualAtom.reportObserved();
+    _$clienteAtualAtom.reportRead();
     return super.clienteAtual;
   }
 
   @override
   set clienteAtual(Cliente value) {
-    _$clienteAtualAtom.context.conditionallyRunInAction(() {
+    _$clienteAtualAtom.reportWrite(value, super.clienteAtual, () {
       super.clienteAtual = value;
-      _$clienteAtualAtom.reportChanged();
-    }, _$clienteAtualAtom, name: '${_$clienteAtualAtom.name}_set');
+    });
   }
 
   final _$ultimoAgendamentoAtom =
@@ -32,17 +30,15 @@ mixin _$ClienteCadastroController on _ClienteCadastroController, Store {
 
   @override
   DateTime get ultimoAgendamento {
-    _$ultimoAgendamentoAtom.context.enforceReadPolicy(_$ultimoAgendamentoAtom);
-    _$ultimoAgendamentoAtom.reportObserved();
+    _$ultimoAgendamentoAtom.reportRead();
     return super.ultimoAgendamento;
   }
 
   @override
   set ultimoAgendamento(DateTime value) {
-    _$ultimoAgendamentoAtom.context.conditionallyRunInAction(() {
+    _$ultimoAgendamentoAtom.reportWrite(value, super.ultimoAgendamento, () {
       super.ultimoAgendamento = value;
-      _$ultimoAgendamentoAtom.reportChanged();
-    }, _$ultimoAgendamentoAtom, name: '${_$ultimoAgendamentoAtom.name}_set');
+    });
   }
 
   final _$proximoAgendamentoAtom =
@@ -50,31 +46,66 @@ mixin _$ClienteCadastroController on _ClienteCadastroController, Store {
 
   @override
   DateTime get proximoAgendamento {
-    _$proximoAgendamentoAtom.context
-        .enforceReadPolicy(_$proximoAgendamentoAtom);
-    _$proximoAgendamentoAtom.reportObserved();
+    _$proximoAgendamentoAtom.reportRead();
     return super.proximoAgendamento;
   }
 
   @override
   set proximoAgendamento(DateTime value) {
-    _$proximoAgendamentoAtom.context.conditionallyRunInAction(() {
+    _$proximoAgendamentoAtom.reportWrite(value, super.proximoAgendamento, () {
       super.proximoAgendamento = value;
-      _$proximoAgendamentoAtom.reportChanged();
-    }, _$proximoAgendamentoAtom, name: '${_$proximoAgendamentoAtom.name}_set');
+    });
   }
 
-  final _$buscarClienteAsyncAction = AsyncAction('buscarCliente');
+  final _$itemsDeAgendamentosAtom =
+      Atom(name: '_ClienteCadastroController.itemsDeAgendamentos');
+
+  @override
+  ObservableList<Agendamento> get itemsDeAgendamentos {
+    _$itemsDeAgendamentosAtom.reportRead();
+    return super.itemsDeAgendamentos;
+  }
+
+  @override
+  set itemsDeAgendamentos(ObservableList<Agendamento> value) {
+    _$itemsDeAgendamentosAtom.reportWrite(value, super.itemsDeAgendamentos, () {
+      super.itemsDeAgendamentos = value;
+    });
+  }
+
+  final _$buscarClienteAsyncAction =
+      AsyncAction('_ClienteCadastroController.buscarCliente');
 
   @override
   Future buscarCliente(int id) {
     return _$buscarClienteAsyncAction.run(() => super.buscarCliente(id));
   }
 
+  final _$mostarAgendamentosAsyncAction =
+      AsyncAction('_ClienteCadastroController.mostarAgendamentos');
+
+  @override
+  Future mostarAgendamentos() {
+    return _$mostarAgendamentosAsyncAction
+        .run(() => super.mostarAgendamentos());
+  }
+
+  final _$carregarProximosAgendamentosAsyncAction =
+      AsyncAction('_ClienteCadastroController.carregarProximosAgendamentos');
+
+  @override
+  Future carregarProximosAgendamentos() {
+    return _$carregarProximosAgendamentosAsyncAction
+        .run(() => super.carregarProximosAgendamentos());
+  }
+
   @override
   String toString() {
-    final string =
-        'clienteAtual: ${clienteAtual.toString()},ultimoAgendamento: ${ultimoAgendamento.toString()},proximoAgendamento: ${proximoAgendamento.toString()}';
-    return '{$string}';
+    return '''
+clienteAtual: ${clienteAtual},
+ultimoAgendamento: ${ultimoAgendamento},
+proximoAgendamento: ${proximoAgendamento},
+itemsDeAgendamentos: ${itemsDeAgendamentos}
+    ''';
   }
 }

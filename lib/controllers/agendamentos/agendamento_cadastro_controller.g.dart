@@ -6,44 +6,52 @@ part of 'agendamento_cadastro_controller.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AgendamentoCadastroController on _AgendamentoCadastroController, Store {
   Computed<double> _$valorCalculadoComputed;
 
   @override
-  double get valorCalculado => (_$valorCalculadoComputed ??=
-          Computed<double>(() => super.valorCalculado))
-      .value;
+  double get valorCalculado =>
+      (_$valorCalculadoComputed ??= Computed<double>(() => super.valorCalculado,
+              name: '_AgendamentoCadastroController.valorCalculado'))
+          .value;
   Computed<int> _$quantidadeCavalosComputed;
 
   @override
-  int get quantidadeCavalos => (_$quantidadeCavalosComputed ??=
-          Computed<int>(() => super.quantidadeCavalos))
+  int get quantidadeCavalos => (_$quantidadeCavalosComputed ??= Computed<int>(
+          () => super.quantidadeCavalos,
+          name: '_AgendamentoCadastroController.quantidadeCavalos'))
       .value;
   Computed<String> _$localPadraoComputed;
 
   @override
   String get localPadrao =>
-      (_$localPadraoComputed ??= Computed<String>(() => super.localPadrao))
+      (_$localPadraoComputed ??= Computed<String>(() => super.localPadrao,
+              name: '_AgendamentoCadastroController.localPadrao'))
           .value;
+  Computed<int> _$indexFerramentaNovaComputed;
+
+  @override
+  int get indexFerramentaNova => (_$indexFerramentaNovaComputed ??=
+          Computed<int>(() => super.indexFerramentaNova,
+              name: '_AgendamentoCadastroController.indexFerramentaNova'))
+      .value;
 
   final _$agendamentoAtualAtom =
       Atom(name: '_AgendamentoCadastroController.agendamentoAtual');
 
   @override
   AgendamentoStore get agendamentoAtual {
-    _$agendamentoAtualAtom.context.enforceReadPolicy(_$agendamentoAtualAtom);
-    _$agendamentoAtualAtom.reportObserved();
+    _$agendamentoAtualAtom.reportRead();
     return super.agendamentoAtual;
   }
 
   @override
   set agendamentoAtual(AgendamentoStore value) {
-    _$agendamentoAtualAtom.context.conditionallyRunInAction(() {
+    _$agendamentoAtualAtom.reportWrite(value, super.agendamentoAtual, () {
       super.agendamentoAtual = value;
-      _$agendamentoAtualAtom.reportChanged();
-    }, _$agendamentoAtualAtom, name: '${_$agendamentoAtualAtom.name}_set');
+    });
   }
 
   final _$itemsClientesAtom =
@@ -51,27 +59,26 @@ mixin _$AgendamentoCadastroController on _AgendamentoCadastroController, Store {
 
   @override
   ObservableList<Cliente> get itemsClientes {
-    _$itemsClientesAtom.context.enforceReadPolicy(_$itemsClientesAtom);
-    _$itemsClientesAtom.reportObserved();
+    _$itemsClientesAtom.reportRead();
     return super.itemsClientes;
   }
 
   @override
   set itemsClientes(ObservableList<Cliente> value) {
-    _$itemsClientesAtom.context.conditionallyRunInAction(() {
+    _$itemsClientesAtom.reportWrite(value, super.itemsClientes, () {
       super.itemsClientes = value;
-      _$itemsClientesAtom.reportChanged();
-    }, _$itemsClientesAtom, name: '${_$itemsClientesAtom.name}_set');
+    });
   }
 
-  final _$setarClienteAsyncAction = AsyncAction('setarCliente');
+  final _$setarClienteAsyncAction =
+      AsyncAction('_AgendamentoCadastroController.setarCliente');
 
   @override
   Future setarCliente(int id) {
     return _$setarClienteAsyncAction.run(() => super.setarCliente(id));
   }
 
-  final _$initAsyncAction = AsyncAction('init');
+  final _$initAsyncAction = AsyncAction('_AgendamentoCadastroController.init');
 
   @override
   Future<void> init(int id, int idCliente) {
@@ -80,8 +87,13 @@ mixin _$AgendamentoCadastroController on _AgendamentoCadastroController, Store {
 
   @override
   String toString() {
-    final string =
-        'agendamentoAtual: ${agendamentoAtual.toString()},itemsClientes: ${itemsClientes.toString()},valorCalculado: ${valorCalculado.toString()},quantidadeCavalos: ${quantidadeCavalos.toString()},localPadrao: ${localPadrao.toString()}';
-    return '{$string}';
+    return '''
+agendamentoAtual: ${agendamentoAtual},
+itemsClientes: ${itemsClientes},
+valorCalculado: ${valorCalculado},
+quantidadeCavalos: ${quantidadeCavalos},
+localPadrao: ${localPadrao},
+indexFerramentaNova: ${indexFerramentaNova}
+    ''';
   }
 }

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:agendamentos/controllers/agendamentos/agendamento_cadastro_controller.dart';
+import 'package:agendamentos/shared/Models/notificacao_model.dart';
 import 'package:agendamentos/shared/constants/name_routes.dart';
 import 'package:agendamentos/shared/helper/get_helper.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
@@ -180,7 +181,7 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
                                           fontSize: 17.5),
                                     ),
                                     SizedBox(height: 5),
-                                    ToggleSwitch(
+                                    ToggleSwitch(                                      
                                       minWidth: 100.0,
                                       minHeight: 40.0,
                                       fontSize: 16.0,
@@ -212,15 +213,11 @@ class _AgendamentoCadastroStateView extends State<AgendamentoCadastroView> {
         onPressed: () {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
-            _controller.salvar().then((_) {
-              Get.snackbar(
-                "Sucesso",
-                "Agendado com sucesso",
-                margin: EdgeInsets.all(5),
-                backgroundColor: Colors.green,
-              );
-              Get.toNamed(NamesRoutes.agendamento);
-            }).catchError(() => Get.snackbar("Erro", "Erro"));
+            _controller.salvar().then((notificaoa) {
+              GetHelper.snackbarRespostaAcao(notificaoa);
+              if(notificaoa.status == StatusAcao.sucesso)
+                Get.toNamed(NamesRoutes.agendamento);
+            });
           }
         },
       ),

@@ -4,6 +4,7 @@ import 'package:agendamentos/models/clientes/cliente_model.dart';
 import 'package:agendamentos/repositories/agendamentos/agendamento_listagem_read_repository.dart';
 import 'package:agendamentos/repositories/agendamentos/agendamento_repository.dart';
 import 'package:agendamentos/repositories/clientes/cliente_repository.dart';
+import 'package:agendamentos/shared/Models/notificacao_model.dart';
 import 'package:agendamentos/shared/constants/constants.dart';
 import 'package:agendamentos/shared/infra/Inject/Injection.dart';
 import 'package:mobx/mobx.dart';
@@ -48,7 +49,9 @@ abstract class _AgendamentoCadastroController with Store {
 
     @computed
     int get indexFerramentaNova {
-      if(agendamentoAtual.ferramentaNova==null) return -1;
+      if(agendamentoAtual.ferramentaNova==null)
+        agendamentoAtual.ferramentaNova = true;
+        
       return agendamentoAtual.ferramentaNova?0:1;
     }
 
@@ -82,19 +85,24 @@ abstract class _AgendamentoCadastroController with Store {
       await _agendamentoRepository.delete(id);
     }
 
-    Future salvar() async {
-      var salvaModelo = Agendamento(
-        data: agendamentoAtual.data,
-        id: agendamentoAtual.id,
-        idCliente: agendamentoAtual.idCliente,
-        quantidade: agendamentoAtual.quantidade,
-        valor: agendamentoAtual.valor,
-        observacao: agendamentoAtual.observacao,
-        ferramentaNova: agendamentoAtual.ferramentaNova
-      );
-      if(salvaModelo.isNew)
-        await _agendamentoRepository.add(salvaModelo);
-      else
-        await _agendamentoRepository.updade(salvaModelo.id, salvaModelo);
+    Future<NotificacaoModel> salvar() async {
+      try {
+        var salvaModelo = Agendamento(
+          data: agendamentoAtual.data,
+          id: agendamentoAtual.id,
+          idCliente: agendamentoAtual.idCliente,
+          quantidade: agendamentoAtual.quantidade,
+          valor: agendamentoAtual.valor,
+          observacao: agendamentoAtual.observacao,
+          ferramentaNova: agendamentoAtual.ferramentaNova
+        );
+        if(salvaModelo.isNew)
+          await _agendamentoRepository.add(salvaModelo);
+        else
+          await _agendamentoRepository.updade(salvaModelo.id, salvaModelo);
+      } catch (e) {
+        return Future.value(NotificacaoModel.erro("erro no cadastro: ${e.toString()}"));
+      }
+      return Future.value(NotificacaoModel.sucesso("Sucesso"));
     }
 }

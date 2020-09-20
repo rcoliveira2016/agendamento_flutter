@@ -42,7 +42,9 @@ abstract class _AgendamentoListagemControllerBase with Store {
       data: model.data,
       idCliente: model.idCliente,
       quantidade: model.quantidade,
-      valor: model.valor
+      valor: model.valor,
+      ferramentaNova: true,
+      observacao: null
     ));
 
     buscarDados();
