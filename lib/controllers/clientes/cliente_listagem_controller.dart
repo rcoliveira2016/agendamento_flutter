@@ -9,13 +9,20 @@ class ClienteListagemController {
   final AgendamentoRepository _agendamentoRepository = Injection.injector.get();
 
   String filtro="";
+  int numeroItens = 5;
 
   Future<List<Cliente>> buscarTodos() {    
     return _clienteRepository.all();
   }
 
   Future<List<Cliente>> buscarTodosClientes() {    
-    return _clienteRepository.buscarClientes(filtro);
+    print(numeroItens);
+    return _clienteRepository.buscarClientes(filtro, numeroItens);
+  }
+
+  void buscarMais() async {    
+    numeroItens+=10;
+    await new Future.delayed(new Duration(milliseconds: 800));
   }
 
   Future<NotificacaoModel> deletar(int id) async {    

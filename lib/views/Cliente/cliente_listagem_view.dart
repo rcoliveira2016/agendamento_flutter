@@ -44,47 +44,61 @@ class _ClienteListagemViewState extends State<ClienteListagemView> {
                     );
                   }
                   print(snapshot.data);
-                  return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      Cliente item = snapshot.data[index];
-                      //return Text(item.nome);
-                      return ListTile(
-                        title: Text("${item.nome}"),
-                        subtitle: Text("${item.localPadrao}"),
-                        trailing: item.devendo
-                            ? Icon(
-                                Icons.money_off,
-                                color: Colors.red,
-                                size: 40,
-                              )
-                            : Icon(
-                                Icons.attach_money,
-                                color: Colors.green,
-                                size: 40,
-                              ),
-                        onTap: () {
-                          Get.toNamed(NamesRoutes.clienteAtualizar,
-                              arguments: item.id);
-                        },
-                        onLongPress: () {
-                          GetHelper.excluirDialogo(
-                            titulo: "Excluir cliente",
-                            mesagem: "Deseja excluir o cliente ${item.nome} (Também será excluido os agendamentos do mesmo).",
-                            onConfirmacao: () {
-                                _clienteListagemController
-                                    .deletar(item.id)
-                                    .then((_) {
-                                      GetHelper.snackbarSucesso(mesagem:"Cliente ${item.nome} excluído com sucesso");
-                                      setState(() {});
-                                      Get.back();
-                                    }).catchError(()=>GetHelper.snackbarErro(mesagem: "Cliente ${item.nome} excluido ocorreu"));
-                              },
-                          );
-                        },
-                        leading: Icon(Icons.perm_identity, size: 35),
-                      );
+                  return NotificationListener<ScrollNotification>(
+                    onNotification: (ScrollNotification scrollInfo){
+                        if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {                        
+                        setState(() {
+                          _clienteListagemController.buscarMais();
+                        });
+                      }
+                      return true;
                     },
+                    child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        Cliente item = snapshot.data[index];
+                        //return Text(item.nome);
+                        return ListTile(
+                          title: Text("${item.nome}"),
+                          subtitle: Text("${item.localPadrao}"),
+                          trailing: item.devendo
+                              ? Icon(
+                                  Icons.money_off,
+                                  color: Colors.red,
+                                  size: 40,
+                                )
+                              : Icon(
+                                  Icons.attach_money,
+                                  color: Colors.green,
+                                  size: 40,
+                                ),
+                          onTap: () {
+                            Get.toNamed(NamesRoutes.clienteAtualizar,
+                                arguments: item.id);
+                          },
+                          onLongPress: () {
+                            GetHelper.excluirDialogo(
+                              titulo: "Excluir cliente",
+                              mesagem:
+                                  "Deseja excluir o cliente ${item.nome} (Também será excluido os agendamentos do mesmo).",
+                              onConfirmacao: () {
+                                _clienteListagemController.deletar(item.id).then(
+                                    (_) {
+                                  GetHelper.snackbarSucesso(
+                                      mesagem:
+                                          "Cliente ${item.nome} excluído com sucesso");
+                                  setState(() {});
+                                  Get.back();
+                                }).catchError(() => GetHelper.snackbarErro(
+                                    mesagem:
+                                        "Cliente ${item.nome} excluido ocorreu"));
+                              },
+                            );
+                          },
+                          leading: Icon(Icons.perm_identity, size: 35),
+                        );
+                      },
+                    ),
                   );
                 },
                 future: _clienteListagemController.buscarTodosClientes(),

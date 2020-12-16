@@ -80,7 +80,7 @@ abstract class _ClienteCadastroController with Store {
       if(clienteAtual.isNew)
         await _clienteRepository.add(clienteAtual);
       else
-        await _clienteRepository.updade(clienteAtual.id, clienteAtual);
+        await _clienteRepository.updade(clienteAtual.id, clienteAtual);      
     }
     
 }

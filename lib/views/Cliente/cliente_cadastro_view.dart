@@ -391,7 +391,7 @@ class _ClienteCadastroStateView extends State<ClienteCadastroView> {
                 backgroundColor: Colors.green,
               );
               Get.toNamed(NamesRoutes.cliente);
-            }).catchError(() => Get.snackbar("Erro", "Erro"));
+            }).catchError((_) => Get.snackbar("Erro", "Erro"));
           }
         },
       ),

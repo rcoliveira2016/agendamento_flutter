@@ -8,7 +8,7 @@ class ClienteRepository extends RepositoryBase<Cliente>{
   @override
   Cliente map(Map<String, dynamic> json) => Cliente.fromJson(json);    
 
-  Future<List<Cliente>> buscarClientes(String nome){
+  Future<List<Cliente>> buscarClientes(String nome, int numeroItens){
     nome = "%$nome%";
     return getAll('''
       select 
@@ -17,7 +17,8 @@ class ClienteRepository extends RepositoryBase<Cliente>{
         $nameTable
       where ? is null or nome like ?
       order by nome
-    ''',[nome,nome]);
+      LIMIT ?
+    ''',[nome, nome, numeroItens]);
   }
 
 }
